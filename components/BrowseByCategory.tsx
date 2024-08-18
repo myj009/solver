@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "./ui/card";
+import { Meteors } from "./ui/meteors";
 
 interface CategoryType {
   title: string;
@@ -43,7 +44,7 @@ const category: CategoryType[] = [
 
 export default function BrowseByCategory() {
   return (
-    <section className="p-8">
+    <section className="p-0 md:p-4 lg:p-8">
       <h1 className="text-4xl font-bold">Browse talent by category</h1>
       <p className="mt-2 text-lg text-muted-foreground">
         Looking for work?{" "}
@@ -53,12 +54,16 @@ export default function BrowseByCategory() {
       </p>
       <div className="grid grid-cols-1 gap-4 mt-8 md:grid-cols-2 lg:grid-cols-4">
         {category.map((c) => (
-          <Card key={c.title} className="p-4 md:h-32 bg-gray-100">
+          <Card
+            key={c.title}
+            className="p-4 md:h-32 text-white relative shadow-xl bg-gray-900 border border-gray-800 h-full overflow-hidden rounded-2xl flex flex-col justify-start items-start"
+          >
             <h2 className="text-xl font-semibold">{c.title}</h2>
             <div className="flex items-center mt-2 space-x-2">
               <StarIcon className="text-green-600" />
               <span>{c.rating / 100}/5</span>
             </div>
+            <Meteors number={20} />
           </Card>
         ))}
       </div>
@@ -84,3 +89,22 @@ function StarIcon(props: any) {
     </svg>
   );
 }
+
+const Icon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      className="h-4 w-4 text-white stroke-2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+      />
+    </svg>
+  );
+};

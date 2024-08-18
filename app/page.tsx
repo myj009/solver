@@ -1,4 +1,5 @@
 import BrowseByCategory from "@/components/BrowseByCategory";
+import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Testomonials from "@/components/Testomonials";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="container flex min-h-screen flex-col items-center gap-16 p-12 md:p-20 lg:p-24">
+    <main className="container flex min-h-screen flex-col items-center gap-16 pb-4 md:pb-4 lg:pb-4 p-12 md:p-20 lg:p-24">
       <section className="flex flex-col md:flex-row gap-6 justify-between w-full">
         <div className="flex flex-col items-center md:items-start gap-6 w-full md:w-1/2">
           <div className="text-5xl md:text-5xl lg:text-7xl">
@@ -25,6 +26,7 @@ export default function Home() {
       <BrowseByCategory />
       <HeroSection />
       <Testomonials />
+      <Footer />
     </main>
   );
 }

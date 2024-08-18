@@ -51,7 +51,7 @@ const testimonials: testimonial[] = [
 
 export default function Testomonials() {
   return (
-    <section className="container flex flex-col gap-10">
+    <section className="w-full px-2 flex flex-col gap-10">
       <div className="text-5xl lg:text-7xl">
         Trusted by leading <br /> brands and startups
       </div>
@@ -64,7 +64,7 @@ export default function Testomonials() {
             >
               <Card
                 className={cn(
-                  `w-full h-96 flex flex-col text-white justify-between p-6`,
+                  `w-full md:h-96 flex flex-col text-white justify-between p-6`,
                   t.bgColor
                 )}
               >
