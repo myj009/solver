@@ -16,17 +16,8 @@ export const authOptions: AuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async session({
-      token,
-      user,
-      session,
-    }: {
-      token: JWT;
-      user: AdapterUser;
-      session: Session;
-    }) {
+    async session({ user, session }: { user: AdapterUser; session: Session }) {
       session.user.id = user.id;
-      console.log(user, session);
       return session;
     },
   },

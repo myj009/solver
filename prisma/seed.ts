@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+const PrismaClient = require("@prisma/client").PrismaClient;
 
 const prisma = new PrismaClient();
 
@@ -21,7 +21,6 @@ async function main() {
       email: "bob@yahoo.com",
     },
   });
-  console.log({ alice, bob });
 }
 main()
   .then(async () => {
