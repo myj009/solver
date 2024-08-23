@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
-import { addJob } from "@/actions/addJob";
+import { addJob } from "@/actions/job/addJob";
 import {
   Form,
   FormControl,
@@ -25,18 +25,6 @@ import countries from "@/data/countries.json";
 import { type CountryProps } from "@/lib/types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "./ui/command";
-import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { cn, lowerCase } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
 import CountryDropdown from "./CountryDropdown";
 
 enum WorkMode {

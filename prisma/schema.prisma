@@ -31,6 +31,7 @@ model User {
 
   createdJob Job[] @relation(name: "JobClient")
   workedJob Job[] @relation(name: "JobDeveloper")
+  JobApplication JobApplication[]
 }
 
 model Account {
@@ -73,6 +74,20 @@ model Job {
   updatedAt DateTime @updatedAt @map("updated_at")
   acceptedAt DateTime? @map("accepted_at")
   completedAt DateTime? @map("completed_at")
+
+  JobApplication JobApplication[]
+}
+
+model JobApplication {
+  id String @id @default(cuid())
+  jobId String @map("job_id")
+  job Job @relation(fields: [jobId], references: [id])
+  developerId String @map("developer_id")
+  developer User @relation(fields: [developerId], references: [id])
+  isAccepted Boolean @default(false) @map("is_accepted")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model Session {

@@ -21,6 +21,48 @@ async function main() {
       email: "bob@yahoo.com",
     },
   });
+  await prisma.job.upsert({
+    where: { id: "cm05dt7z6000008jv5l302fo6" },
+    update: {},
+    create: {
+      id: "cm05dt7z6000008jv5l302fo6",
+      title: "Software Engineer",
+      description: "Develop software",
+      amount: 100000,
+      workMode: "HYBRID",
+      location: "USA",
+      clientId: alice.id,
+    },
+  });
+  await prisma.job.upsert({
+    where: { id: "cm05dt7z6000008jv5l302fo7" },
+    update: {},
+    create: {
+      id: "cm05dt7z6000008jv5l302fo7",
+      title: "Software Engineer",
+      description: "Develop software",
+      amount: 100000,
+      workMode: "REMOTE",
+      location: "USA",
+      clientId: bob.id,
+      isAccepted: true,
+      developerId: alice.id,
+      acceptedAt: new Date(),
+    },
+  });
+  await prisma.job.upsert({
+    where: { id: "cm05dt7z6000008jv5l302fo8" },
+    update: {},
+    create: {
+      id: "cm05dt7z6000008jv5l302fo8",
+      title: "Software Engineer",
+      description: "Develop software",
+      amount: 100000,
+      workMode: "OFFICE",
+      location: "USA",
+      clientId: bob.id,
+    },
+  });
 }
 main()
   .then(async () => {

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import Appbar from "@/components/Appbar";
 import Providers from "./providers";
+import { Toaster } from "react-hot-toast";
 
 const fontHeading = Inter({
   subsets: ["latin"],
@@ -31,10 +32,15 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body
-          className={cn("antialiased", fontHeading.variable, fontBody.variable)}
+          className={cn(
+            "antialiased min-h-screen",
+            fontHeading.variable,
+            fontBody.variable
+          )}
         >
           <Appbar />
-          <div className="mt-16">{children}</div>
+          <div className="pt-16 min-h-screen">{children}</div>
+          <Toaster />
         </body>
       </Providers>
     </html>
