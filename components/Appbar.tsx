@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 
 export default async function Appbar() {
   const session = await getServerSession(authOptions);
+  console.log(session);
 
   return (
     <header className="fixed top-0 z-50 w-full bg-background shadow-sm">
