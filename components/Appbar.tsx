@@ -1,21 +1,20 @@
-import Link from "next/link";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuLink,
-  NavigationMenuItem,
-  NavigationMenuTrigger,
   NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { signIn, signOut } from "next-auth/react";
-import { getServerSession } from "next-auth";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { authOptions } from "@/lib/auth";
-import AuthButton from "./AuthButton";
-import React from "react";
 import { cn } from "@/lib/utils";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
+import React from "react";
+import AuthButton from "./AuthButton";
+import ProfileDropdown from "./ProfileDropdown";
 
 export default async function Appbar() {
   const session = await getServerSession(authOptions);
@@ -135,11 +134,8 @@ export default async function Appbar() {
         </div>
         <div className="flex gap-4">
           <AuthButton />
-          {session && session.user && (
-            <Avatar className="">
-              <AvatarImage src={session.user?.image ?? undefined} alt="@MJ" />
-              <AvatarFallback>MJ</AvatarFallback>
-            </Avatar>
+          {session && session?.user && (
+            <ProfileDropdown image={session.user.image} />
           )}
         </div>
       </div>

@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html className="overflow-y-scroll no-scrollbar" lang="en">
       <Providers>
         <body
           className={cn(
