@@ -2,9 +2,7 @@ import { AuthOptions, Session } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "./db";
-import { AdapterUser } from "next-auth/adapters";
 import bcrypt from "bcrypt";
 import { ErrorHandler } from "./error";
 import { SignInSchema, SignUpSchema } from "./validators/auth.validators";
@@ -109,6 +107,44 @@ export const authOptions: AuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    async signIn({ user, account, profile }) {
+      if (
+        account &&
+        (account.provider === "github" || account.provider === "google")
+      ) {
+        const { email, name, image } = user;
+        let User;
+        try {
+          User = await prisma.user.findUnique({
+            where: { email: email || "" },
+          });
+          if (!User) {
+            User = await prisma.user.create({
+              data: {
+                email: email || "",
+                name,
+                image,
+              },
+            });
+          } else {
+            User = await prisma.user.update({
+              where: { email: email || "" },
+              data: { name, image },
+            });
+          }
+          user.id = User?.id || "";
+          user.name = User?.name || "";
+          user.image = User?.image || "";
+          user.email = User?.email || "";
+
+          return true;
+        } catch (error) {
+          console.error("Error saving user to database:", error);
+          return false;
+        }
+      }
+      return true;
+    },
     jwt({ token, user, trigger, session }) {
       if (trigger === "update") {
         return {
@@ -120,6 +156,7 @@ export const authOptions: AuthOptions = {
         token.id = user.id;
         token.name = user.name;
         token.picture = user.image;
+        token.email = user.email || "";
       }
       return token;
     },
@@ -127,6 +164,7 @@ export const authOptions: AuthOptions = {
       if (token && session && session.user) {
         session.user.id = token.id;
         session.user.image = token.picture || "";
+        session.user.email = token.email || "";
       }
       return session;
     },

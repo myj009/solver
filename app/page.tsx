@@ -3,9 +3,17 @@ import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Testomonials from "@/components/Testomonials";
 import { Button } from "@/components/ui/button";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  if (session && session.user) {
+    return redirect("/jobs");
+  }
+
   return (
     <main className="container flex min-h-screen flex-col items-center gap-16 pb-4 md:pb-4 lg:pb-4 p-12 md:p-20 lg:p-24">
       <section className="flex flex-col md:flex-row gap-6 justify-between w-full">

@@ -30,14 +30,17 @@ model User {
   createdJob Job[] @relation(name: "JobClient")
   workedJob Job[] @relation(name: "JobDeveloper")
   JobApplication JobApplication[]
+  UserExperience UserExperience[]
+  UserEducation UserEducation[]
 }
 
 model Job {
   id String @id @default(cuid())
   title String
-  description String
+  shortDescription String @map("short_description")
+  longDescription String @map("long_description")
   workMode WorkMode @map("work_mode")
-  location String
+  country Country
   amount Int?
   clientId String @map("client_id")
   client User @relation(fields: [clientId], references: [id], name: "JobClient")
@@ -60,6 +63,34 @@ model JobApplication {
   developerId String @map("developer_id")
   developer User @relation(fields: [developerId], references: [id])
   isAccepted Boolean @default(false) @map("is_accepted")
+  isRejected Boolean @default(false) @map("is_rejected")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model UserExperience {
+  id String @id @default(cuid())
+  userId String @map("user_id")
+  user User @relation(fields: [userId], references: [id])
+  companyName String
+  position String
+  description String
+  startDate DateTime
+  endDate DateTime?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model UserEducation {
+  id String @id @default(cuid())
+  userId String @map("user_id")
+  user User @relation(fields: [userId], references: [id])
+  institutionName String
+  fieldOfStudy String
+  startDate DateTime
+  endDate DateTime?
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

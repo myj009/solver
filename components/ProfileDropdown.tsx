@@ -2,7 +2,9 @@ import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -18,11 +20,22 @@ export default function ProfileDropdown({ image }: { image: string }) {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <Link href="/profile">
-          <DropdownMenuLabel className="cursor-pointer">
-            My Account
+        <DropdownMenuItem className="cursor-pointer" asChild>
+          <DropdownMenuLabel asChild>
+            <Link href="/profile">My Account</Link>
           </DropdownMenuLabel>
-        </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer" asChild>
+          <DropdownMenuLabel asChild>
+            <Link href="/add-job">Add a Job Posting</Link>
+          </DropdownMenuLabel>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer" asChild>
+          <DropdownMenuLabel asChild>
+            <Link href="/job-postings">View My Job Postings</Link>
+          </DropdownMenuLabel>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

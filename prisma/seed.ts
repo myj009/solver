@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Country, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -27,10 +27,11 @@ async function main() {
     create: {
       id: "cm05dt7z6000008jv5l302fo6",
       title: "Software Engineer",
-      description: "Develop software",
+      shortDescription: "Develop software",
+      longDescription: "Develop software",
       amount: 100000,
       workMode: "HYBRID",
-      location: "USA",
+      country: Country.UNITED_STATES,
       clientId: alice.id,
     },
   });
@@ -40,10 +41,11 @@ async function main() {
     create: {
       id: "cm05dt7z6000008jv5l302fo7",
       title: "Software Engineer",
-      description: "Develop software",
+      longDescription: "Develop software",
+      shortDescription: "Develop software",
       amount: 100000,
       workMode: "REMOTE",
-      location: "USA",
+      country: Country.UNITED_STATES,
       clientId: bob.id,
       isAccepted: true,
       developerId: alice.id,
@@ -56,10 +58,11 @@ async function main() {
     create: {
       id: "cm05dt7z6000008jv5l302fo8",
       title: "Software Engineer",
-      description: "Develop software",
+      longDescription: "Develop software",
+      shortDescription: "Develop software",
       amount: 100000,
       workMode: "OFFICE",
-      location: "USA",
+      country: Country.UNITED_STATES,
       clientId: bob.id,
     },
   });

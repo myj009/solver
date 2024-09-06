@@ -1,54 +1,59 @@
-"use client";
-
-import React from "react";
+import Link from "next/link";
+import { Job, WorkMode, Country } from "@prisma/client";
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Button } from "./ui/button";
-import { Job } from "@prisma/client";
-import applyJob from "@/actions/job/applyJob";
-import toast from "react-hot-toast";
-import { cn } from "@/lib/utils";
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { JobWithClient } from "@/types/prisma-types";
 
-export default function JobCard({
-  job,
-  applyDisabled = false,
-  className,
-}: {
-  job: Job;
-  applyDisabled?: boolean;
-  className?: string;
-}) {
-  const onJobApply = async (job: Job) => {
-    const res = await applyJob(job);
-    if (res.status !== 200) {
-      toast.error(res.message);
-      return;
-    }
-    toast.success(res.message);
-  };
+interface JobCardProps {
+  job: JobWithClient;
+}
 
+export default function JobCard({ job }: JobCardProps) {
   return (
-    <Card key={job.id} className={cn(className, "hover:shadow-lg")}>
-      <CardHeader className="flex flex-row justify-between">
-        <div className="flex flex-col space-y-2">
-          <CardTitle>{job.title}</CardTitle>
-          <CardDescription>{job.description}</CardDescription>
-        </div>
-        {!applyDisabled && (
-          <Button onClick={() => onJobApply(job)} className="bg-green-600">
-            Apply
+    <Card>
+      <CardHeader>
+        <div className="flex flex-row gap-2 justify-between items-center">
+          <div className="flex flex-col gap-2">
+            <CardTitle>{job.title}</CardTitle>
+            <CardDescription>{job.shortDescription}</CardDescription>
+          </div>
+          <Button>
+            <Link href={`/jobs/${job.id}/apply`}>Apply Now</Link>
           </Button>
-        )}
+        </div>
       </CardHeader>
-      <CardContent className="flex space-x-4">
-        <div className="">{job.amount}</div>
-        <div className="">{job.workMode}</div>
-        <div className="">{job.location}</div>
+      <CardContent className="grid grid-cols-2 gap-4">
+        <div>
+          <p>
+            <strong>Work Mode:</strong>
+          </p>
+          <p>{job.workMode}</p>
+        </div>
+        <div>
+          <p>
+            <strong>Country:</strong>
+          </p>
+          <p>{job.country}</p>
+        </div>
+        <div>
+          <p>
+            <strong>Amount:</strong>
+          </p>
+          <p>${job.amount}</p>
+        </div>
+        <div>
+          <p>
+            <strong>Client:</strong>
+          </p>
+          <p>{job.client.name}</p>
+        </div>
       </CardContent>
     </Card>
   );

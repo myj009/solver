@@ -1,4 +1,4 @@
-import AddJobForm from "@/components/AddJobForm";
+import { CreateJobForm } from "@/components/CreateJobForm";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -9,5 +9,9 @@ export default async function page() {
   if (!session || !session.user) {
     redirect("/api/auth/signin");
   }
-  return <AddJobForm />;
+  return (
+    <div className="container border my-10 py-6 rounded-lg">
+      <CreateJobForm />
+    </div>
+  );
 }

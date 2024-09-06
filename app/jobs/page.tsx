@@ -1,40 +1,15 @@
-import JobCard from "@/components/JobCard";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/db";
-import { Job } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import React from "react";
+import JobList from "@/components/JobList";
+import { Suspense } from "react";
 
-export default async function page() {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user) return;
-
-  const jobs = await prisma.job.findMany({
-    where: {
-      isAccepted: false,
-      clientId: {
-        not: session.user.id,
-      },
-    },
-  });
-
+export default function JobsPage() {
   return (
-    <section className="container flex flex-col space-y-4 pt-8">
-      {jobs.map((job) => (
-        <JobCard key={job.id} job={job} />
-      ))}
-    </section>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Available Jobs</h1>
+      <div className="w-full">
+        <Suspense fallback={<div>Loading jobs...</div>}>
+          <JobList />
+        </Suspense>
+      </div>
+    </div>
   );
-}
-
-function ApplyButton() {
-  return <div>page</div>;
 }

@@ -8,6 +8,12 @@ const nextConfig = {
         port: "",
         pathname: "/ddaducbis/**",
       },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
