@@ -17,14 +17,29 @@ const FormSchema = z.object({
   country: z.nativeEnum(Country),
 });
 
-export async function createJob(values: z.infer<typeof FormSchema>) {
+export async function upsertJob(
+  values: z.infer<typeof FormSchema>,
+  jobId?: string
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     throw new Error("Unauthorized");
   }
 
-  await prisma.job.create({
-    data: {
+  await prisma.job.upsert({
+    where: {
+      id: jobId,
+    },
+    update: {
+      title: values.title,
+      shortDescription: values.shortDescription,
+      longDescription: values.longDescription,
+      workMode: values.workMode,
+      amount: values.amount,
+      country: values.country,
+      clientId: session.user.id,
+    },
+    create: {
       title: values.title,
       shortDescription: values.shortDescription,
       longDescription: values.longDescription,

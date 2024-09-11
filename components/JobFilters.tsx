@@ -64,7 +64,10 @@ export default function JobFilters({ onFilterChange }: JobFiltersProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex gap-4 items-end"
+      >
         <FormField
           control={form.control}
           name="country"

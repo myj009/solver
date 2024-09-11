@@ -1,24 +1,32 @@
 import { Country, PrismaClient } from "@prisma/client";
-
+import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 async function main() {
   const alice = await prisma.user.upsert({
-    where: { id: "cm00jpw8c000008leg64ucaan" },
-    update: {},
+    where: { id: "1" },
+    update: {
+      name: "alice",
+      password: bcrypt.hashSync("123456", 10),
+    },
     create: {
-      id: "cm00jpw8c000008leg64ucaan",
+      id: "1",
       name: "alice",
       email: "alice@gmail.com",
+      password: bcrypt.hashSync("123456", 10),
     },
   });
   const bob = await prisma.user.upsert({
-    where: { id: "cm00jtdvm000108leg7lr6eo2" },
-    update: {},
+    where: { id: "2" },
+    update: {
+      name: "bob",
+      password: bcrypt.hashSync("123456", 10),
+    },
     create: {
-      id: "cm00jtdvm000108leg7lr6eo2",
+      id: "2",
       name: "bob",
       email: "bob@yahoo.com",
+      password: bcrypt.hashSync("123456", 10),
     },
   });
   await prisma.job.upsert({

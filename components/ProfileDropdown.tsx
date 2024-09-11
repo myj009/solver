@@ -2,6 +2,7 @@ import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -26,16 +27,35 @@ export default function ProfileDropdown({ image }: { image: string }) {
           </DropdownMenuLabel>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <DropdownMenuLabel asChild>
-            <Link href="/add-job">Add a Job Posting</Link>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-bold text-lg ">
+            For Clients
           </DropdownMenuLabel>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <DropdownMenuLabel asChild>
-            <Link href="/job-postings">View My Job Postings</Link>
+          <DropdownMenuItem
+            className="cursor-pointer text-secondary-foreground"
+            asChild
+          >
+            <DropdownMenuLabel asChild>
+              <Link href="/client/add-job">Add a Job Posting</Link>
+            </DropdownMenuLabel>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <DropdownMenuLabel asChild>
+              <Link href="/client/jobs">View My Job Postings</Link>
+            </DropdownMenuLabel>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-bold text-lg ">
+            For Developers
           </DropdownMenuLabel>
-        </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <DropdownMenuLabel asChild>
+              <Link href="/job-postings">View Jobs Applied To</Link>
+            </DropdownMenuLabel>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

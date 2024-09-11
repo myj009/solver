@@ -2,8 +2,15 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export type Job = {
   id: string;
@@ -72,9 +79,26 @@ export const columns: ColumnDef<Job>[] = [
     cell: ({ row }) => {
       const job = row.original;
       return (
-        <Link href={`/job-postings/${job.id}/applications`}>
-          <Button variant="outline">View Applications</Button>
-        </Link>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => {}}>
+              <Link href={`/client/${job.id}/applications`}>
+                View Applications
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={() => {}}>
+              <Link href={`/client/${job.id}/edit-job`}>Edit job posting</Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },

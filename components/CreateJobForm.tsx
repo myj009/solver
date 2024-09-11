@@ -1,6 +1,6 @@
 "use client";
 
-import { createJob } from "@/actions/job/createJob";
+import { upsertJob } from "@/actions/job/createJob";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Country, WorkMode } from "@prisma/client";
+import { Country, Job, WorkMode } from "@prisma/client";
 import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -43,15 +43,17 @@ const formSchema = z.object({
   country: z.nativeEnum(Country),
 });
 
-export function CreateJobForm() {
+export function CreateJobForm({ job }: { job?: Job }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      shortDescription: "",
-      longDescription: `
+      title: job?.title || "",
+      shortDescription: job?.shortDescription || "",
+      longDescription:
+        job?.longDescription ||
+        `
 **About the Client**
    
 
@@ -61,16 +63,16 @@ export function CreateJobForm() {
 **Preferred Qualifications**
 
 `,
-      workMode: WorkMode.REMOTE,
-      amount: 0,
-      country: Country.UNITED_STATES,
+      workMode: job?.workMode || WorkMode.REMOTE,
+      amount: job?.amount || 0,
+      country: job?.country || Country.UNITED_STATES,
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      await createJob(values);
+      await upsertJob(values, job?.id);
       form.reset();
       toast.success("Job created successfully");
     } catch (error) {
@@ -206,7 +208,7 @@ export function CreateJobForm() {
           )}
         />
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Creating..." : "Create Job"}
+          {isSubmitting ? "Creating..." : job ? "Update Job" : "Create Job"}
         </Button>
       </form>
     </Form>

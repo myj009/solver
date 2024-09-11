@@ -22,12 +22,34 @@ export default async function applyJob(job: Job): Promise<IReturnType> {
     };
   }
 
-  await prisma.jobApplication.create({
-    data: {
-      developerId: session.user.id,
-      jobId: job.id,
-    },
-  });
+  try {
+    const existingApplication = await prisma.jobApplication.findFirst({
+      where: {
+        developerId: session.user.id,
+        jobId: job.id,
+      },
+    });
+
+    if (existingApplication) {
+      return {
+        message: "Already applied to this job",
+        status: 400,
+      };
+    }
+
+    await prisma.jobApplication.create({
+      data: {
+        developerId: session.user.id,
+        jobId: job.id,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Failed to apply to job",
+      status: 500,
+    };
+  }
 
   return {
     message: "Applied to job successfully",

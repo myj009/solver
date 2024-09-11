@@ -23,3 +23,19 @@ export type JobWithClient = Prisma.JobGetPayload<{
     };
   };
 }>;
+
+export type JobWithClientAndApplications = Prisma.JobGetPayload<{
+  include: {
+    client: {
+      select: {
+        id: true;
+        name: true;
+      };
+    };
+    _count: {
+      select: {
+        JobApplication: true;
+      };
+    };
+  };
+}>;

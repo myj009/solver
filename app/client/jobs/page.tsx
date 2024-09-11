@@ -1,28 +1,35 @@
-import JobCard from "@/components/JobCard";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import React from "react";
+import { columns } from "@/components/job-postings-table/columns";
+import { DataTable } from "@/components/job-postings-table/data-table";
 import prisma from "@/lib/db";
-import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
-export default async function page() {
+async function getJobs() {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user) return;
+  if (!session || !session.user) {
+    return [];
+  }
 
   const jobs = await prisma.job.findMany({
     where: {
-      isAccepted: false,
       clientId: session.user.id,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
+  return jobs;
+}
+
+export default async function JobPostingsPage() {
+  const jobs = await getJobs();
+
   return (
-    <section className="container flex flex-col space-y-4 pt-8">
-      {jobs.map((job) => (
-        <Link key={job.id} href={`/client/jobs/${job.id}`}>
-          <JobCard className="cursor-pointer" job={job} applyDisabled={true} />
-        </Link>
-      ))}
-    </section>
+    <div className="container mx-auto py-10">
+      <h1 className="text-2xl font-bold mb-5">Your Job Postings</h1>
+      <DataTable columns={columns} data={jobs} />
+    </div>
   );
 }
