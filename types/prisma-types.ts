@@ -39,3 +39,10 @@ export type JobWithClientAndApplications = Prisma.JobGetPayload<{
     };
   };
 }>;
+
+export type UserWithExperienceAndEducation = Prisma.UserGetPayload<{
+  include: {
+    UserExperience: true;
+    UserEducation: true;
+  };
+}>;

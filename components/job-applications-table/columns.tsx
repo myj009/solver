@@ -68,7 +68,7 @@ export const columns: ColumnDef<JobApplicationWithDeveloper>[] = [
               Reject Application
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/developers/${application.developer.id}`}>
+              <Link href={`/developer/${application.developer.id}`}>
                 View Developer Profile
               </Link>
             </DropdownMenuItem>
