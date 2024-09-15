@@ -11,6 +11,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { CreateJobForm } from "@/components/CreateJobForm";
+import JobPostingTableActions from "./actions";
 
 export type Job = {
   id: string;
@@ -77,29 +81,7 @@ export const columns: ColumnDef<Job>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const job = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => {}}>
-              <Link href={`/client/${job.id}/applications`}>
-                View Applications
-              </Link>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem onClick={() => {}}>
-              <Link href={`/client/${job.id}/edit-job`}>Edit job posting</Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <JobPostingTableActions row={row} />;
     },
   },
 ];

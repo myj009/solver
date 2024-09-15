@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 import Appbar from "@/components/Appbar";
-import Providers from "./providers";
+import Providers, { ThemeProvider } from "./providers";
 import { Toaster } from "react-hot-toast";
 
 const fontHeading = Inter({
@@ -38,9 +38,16 @@ export default function RootLayout({
             fontBody.variable
           )}
         >
-          <Appbar />
-          <div className="pt-16 min-h-screen">{children}</div>
-          <Toaster />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Appbar />
+            <div className="pt-16 min-h-screen">{children}</div>
+            <Toaster />
+          </ThemeProvider>
         </body>
       </Providers>
     </html>

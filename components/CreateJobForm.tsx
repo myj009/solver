@@ -43,7 +43,13 @@ const formSchema = z.object({
   country: z.nativeEnum(Country),
 });
 
-export function CreateJobForm({ job }: { job?: Job }) {
+export function CreateJobForm({
+  job,
+  onSuccess,
+}: {
+  job?: Job;
+  onSuccess?: () => void;
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -73,144 +79,161 @@ export function CreateJobForm({ job }: { job?: Job }) {
     setIsSubmitting(true);
     try {
       await upsertJob(values, job?.id);
-      form.reset();
-      toast.success("Job created successfully");
+      toast.success(
+        job ? "Job updated successfully" : "Job created successfully"
+      );
+      if (onSuccess) onSuccess();
     } catch (error) {
-      // Handle error
       console.error(error);
+      toast.error("An error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">Job Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter job title" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="shortDescription"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">
-                Short Description
-              </FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter short description" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="longDescription"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">
-                Long Description(In Markdown)
-              </FormLabel>
-              <FormControl>
-                <div className="flex max-h-96 w-full">
-                  <MDEditor
-                    className="w-full"
-                    minHeight={400}
-                    height={400}
-                    value={field.value}
-                    onChange={(value: string | undefined) =>
-                      field.onChange(value || "")
-                    }
+    <div className="flex flex-col gap-4">
+      <div className="text-2xl font-bold">
+        {job ? "Edit Job Posting" : "Create a Job Posting"}
+      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">
+                  Job Title
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter job title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="shortDescription"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">
+                  Short Description
+                </FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Enter short description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="longDescription"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">
+                  Long Description(In Markdown)
+                </FormLabel>
+                <FormControl>
+                  <div className="flex max-h-96 w-full">
+                    <MDEditor
+                      className="w-full"
+                      minHeight={400}
+                      height={400}
+                      value={field.value}
+                      onChange={(value: string | undefined) =>
+                        field.onChange(value || "")
+                      }
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="workMode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">
+                  Work Mode
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select work mode" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.values(WorkMode).map((mode) => (
+                      <SelectItem key={mode} value={mode}>
+                        {mode}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">
+                  Amount (optional)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="Enter amount"
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="workMode"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">Work Mode</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select work mode" />
-                  </SelectTrigger>
                 </FormControl>
-                <SelectContent>
-                  {Object.values(WorkMode).map((mode) => (
-                    <SelectItem key={mode} value={mode}>
-                      {mode}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">
-                Amount (optional)
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Enter amount"
-                  {...field}
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="country"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">Country</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a country" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {countries.map((country) => (
-                    <SelectItem key={country.value} value={country.value}>
-                      {country.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Creating..." : job ? "Update Job" : "Create Job"}
-        </Button>
-      </form>
-    </Form>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Country</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a country" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {countries.map((country) => (
+                      <SelectItem key={country.value} value={country.value}>
+                        {country.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? "Submitting..." : job ? "Update Job" : "Create Job"}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

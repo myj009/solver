@@ -115,7 +115,7 @@ export default function ProfileForm({
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center space-x-4">
             <div className="relative w-24 h-24">
               <Image
                 src={user.image || "/public/profile.png"}
@@ -142,9 +142,9 @@ export default function ProfileForm({
                 onChange={handleImageUpload}
               />
             </div>
-            <div>
+            <div className="flex flex-col items-center sm:items-start">
               <h2 className="text-xl font-semibold">{user.name}</h2>
-              <p className="text-gray-600">{user.email}</p>
+              <p className="text-muted-foreground">{user.email}</p>
             </div>
           </div>
 

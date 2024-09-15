@@ -15,6 +15,7 @@ import Link from "next/link";
 import React from "react";
 import AuthButton from "./AuthButton";
 import ProfileDropdown from "./ProfileDropdown";
+import { ModeToggle } from "./ThemeToggle";
 
 export default async function Appbar() {
   const session = await getServerSession(authOptions);
@@ -133,6 +134,7 @@ export default async function Appbar() {
           </NavigationMenu>
         </div>
         <div className="flex gap-4">
+          <ModeToggle />
           <AuthButton />
           {session && session?.user && (
             <ProfileDropdown image={session.user.image} />

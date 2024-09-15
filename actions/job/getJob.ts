@@ -1,17 +1,21 @@
-import { CreateJobForm } from "@/components/CreateJobForm";
+"use server";
+
 import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import React from "react";
 
-export default async function page() {
+export async function getJob(jobId: string) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     redirect("/api/auth/signin");
   }
-  return (
-    <div className="container border my-10 py-6 rounded-lg">
-      <CreateJobForm />
-    </div>
-  );
+
+  const job = await prisma.job.findUnique({
+    where: {
+      id: jobId,
+    },
+  });
+
+  return job;
 }
