@@ -5,10 +5,9 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function AuthButton() {
   const session = useSession();
-  console.log(session);
   return (
     <Button
-      className="bg-green-600"
+      variant="default"
       onClick={() => {
         session && session.data?.user ? signOut() : signIn();
       }}

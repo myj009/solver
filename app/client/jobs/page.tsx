@@ -4,6 +4,7 @@ import { DataTable } from "@/components/job-postings-table/data-table";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { JobWithDeveloperEmail } from "@/types/prisma-types";
 
 async function getJobs() {
   const session = await getServerSession(authOptions);
@@ -11,12 +12,19 @@ async function getJobs() {
     return [];
   }
 
-  const jobs = await prisma.job.findMany({
+  const jobs: JobWithDeveloperEmail[] = await prisma.job.findMany({
     where: {
       clientId: session.user.id,
     },
     orderBy: {
       createdAt: "desc",
+    },
+    include: {
+      developer: {
+        select: {
+          email: true,
+        },
+      },
     },
   });
 

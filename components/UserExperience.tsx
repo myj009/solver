@@ -122,7 +122,12 @@ export default function UserExperienceComponent({
   };
 
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion
+      type="single"
+      defaultValue="experience"
+      collapsible
+      className="w-full"
+    >
       <AccordionItem value="experience">
         <AccordionTrigger>Work Experience</AccordionTrigger>
         <AccordionContent className="flex flex-col space-y-2">

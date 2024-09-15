@@ -15,20 +15,9 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { CreateJobForm } from "@/components/CreateJobForm";
 import JobPostingTableActions from "./actions";
+import { JobWithDeveloperEmail } from "@/types/prisma-types";
 
-export type Job = {
-  id: string;
-  title: string;
-  shortDescription: string;
-  workMode: "REMOTE" | "HYBRID" | "OFFICE";
-  country: string;
-  amount: number | null;
-  isAccepted: boolean;
-  developerId: string | null;
-  createdAt: Date;
-};
-
-export const columns: ColumnDef<Job>[] = [
+export const columns: ColumnDef<JobWithDeveloperEmail>[] = [
   {
     accessorKey: "title",
     header: "Title",
@@ -59,9 +48,9 @@ export const columns: ColumnDef<Job>[] = [
     cell: ({ row }) => (row.getValue("isAccepted") ? "Accepted" : "Open"),
   },
   {
-    accessorKey: "developerId",
+    accessorKey: "developer.email",
     header: "Developer",
-    cell: ({ row }) => row.getValue("developerId") || "N/A",
+    cell: ({ row }) => row.original.developer?.email || "N/A",
   },
   {
     accessorKey: "createdAt",

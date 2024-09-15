@@ -55,7 +55,11 @@ export function DataTable<TData, TValue>({
           onClick={() => {
             table.getColumn("status")?.setFilterValue("Accepted");
           }}
-          variant="outline"
+          variant={
+            table.getColumn("status")?.getFilterValue() === "Accepted"
+              ? "default"
+              : "outline"
+          }
         >
           Accepted Applications
         </Button>
@@ -63,7 +67,11 @@ export function DataTable<TData, TValue>({
           onClick={() => {
             table.getColumn("status")?.setFilterValue("Rejected");
           }}
-          variant="outline"
+          variant={
+            table.getColumn("status")?.getFilterValue() === "Rejected"
+              ? "default"
+              : "outline"
+          }
         >
           Rejected Applications
         </Button>
@@ -71,7 +79,11 @@ export function DataTable<TData, TValue>({
           onClick={() => {
             table.getColumn("status")?.setFilterValue(undefined);
           }}
-          variant="outline"
+          variant={
+            table.getColumn("status")?.getFilterValue() === undefined
+              ? "default"
+              : "outline"
+          }
         >
           All Applications
         </Button>

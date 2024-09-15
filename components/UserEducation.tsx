@@ -121,7 +121,12 @@ export default function UserEducationComponent({
   };
 
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion
+      type="single"
+      defaultValue="education"
+      collapsible
+      className="w-full"
+    >
       <AccordionItem value="education">
         <AccordionTrigger>Education</AccordionTrigger>
         <AccordionContent className="flex flex-col space-y-2">

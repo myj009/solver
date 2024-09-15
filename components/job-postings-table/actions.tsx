@@ -13,12 +13,16 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { CreateJobForm } from "../CreateJobForm";
 import { Row } from "@tanstack/react-table";
 import { getJob } from "@/actions/job/getJob";
-import { Job as JobType } from "@prisma/client";
-import { Job } from "./columns";
+import { JobWithDeveloperEmail } from "@/types/prisma-types";
+import { Job } from "@prisma/client";
 
-export default function JobPostingTableActions({ row }: { row: Row<Job> }) {
+export default function JobPostingTableActions({
+  row,
+}: {
+  row: Row<JobWithDeveloperEmail>;
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [job, setJob] = useState<JobType | null>(null);
+  const [job, setJob] = useState<Job | null>(null);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -40,6 +44,9 @@ export default function JobPostingTableActions({ row }: { row: Row<Job> }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          {row.original.developer?.email && (
+            <DropdownMenuItem>Chat with Developer</DropdownMenuItem>
+          )}
           <DropdownMenuItem>
             <Link href={`/client/${row.original.id}/applications`}>
               View Applications

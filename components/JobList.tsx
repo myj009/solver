@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { getJobs } from "@/actions/job/listJobs";
 import JobCard from "./JobCard";
 import {
@@ -15,6 +15,8 @@ import {
 import { Job, WorkMode, Country } from "@prisma/client";
 import { JobWithClient } from "@/types/prisma-types";
 import JobFilters from "./JobFilters";
+import FiltersSkeleton from "./skeletons/FiltersSkeleton";
+import CardsSkeleton from "./skeletons/CardsSkeleton";
 
 type JobFilters = {
   country?: Country;
@@ -28,11 +30,14 @@ export default function JobList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState<JobFilters>({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchJobs = useCallback(async () => {
+    setIsLoading(true);
     const { jobs, totalPages } = await getJobs(currentPage, filters);
     setJobs(jobs);
     setTotalPages(totalPages);
+    setIsLoading(false);
   }, [currentPage, filters]);
 
   useEffect(() => {
@@ -46,18 +51,27 @@ export default function JobList() {
 
   return (
     <div className="flex flex-col gap-4">
-      <JobFilters onFilterChange={handleFilterChange} />
-      <div className="flex flex-col gap-4 w-full">
-        {jobs.map((job) => (
-          <JobCard key={job.id} job={job} />
-        ))}
-      </div>
-      <Pagination
-        className="mt-8"
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+      {isLoading ? (
+        <>
+          <FiltersSkeleton />
+          <CardsSkeleton />
+        </>
+      ) : (
+        <>
+          <JobFilters onFilterChange={handleFilterChange} />
+          <div className="flex flex-col gap-4 w-full">
+            {jobs.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </div>
+          <Pagination
+            className="mt-8"
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </>
+      )}
     </div>
   );
 }
