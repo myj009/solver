@@ -1,9 +1,8 @@
-import React from "react";
-import { Avatar, AvatarImage } from "../ui/avatar";
-import { UserData } from "@/app/data";
+import { UserData } from "@/lib/chat-data";
+import { cn } from "@/lib/utils";
 import { Info, Phone, Video } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { Avatar, AvatarImage } from "../ui/avatar";
 import { buttonVariants } from "../ui/button";
 import { ExpandableChatHeader } from "../ui/chat/expandable-chat";
 

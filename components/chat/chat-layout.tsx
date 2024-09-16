@@ -1,14 +1,14 @@
 "use client";
 
-import { userData } from "@/app/data";
-import React, { useEffect, useState } from "react";
+import { Sidebar } from "@/components/ui/chat/chat-sidebar";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { userData } from "@/lib/chat-data";
 import { cn } from "@/lib/utils";
-import { Sidebar } from "@/components/ui/chat/chat-sidebar";
+import React, { useEffect, useState } from "react";
 import { Chat } from "./chat";
 
 interface ChatLayoutProps {

@@ -1,8 +1,7 @@
-import { Message, UserData } from "@/app/data";
-import ChatTopbar from "./chat-topbar";
-import { ChatList } from "./chat-list";
-import React, { useEffect, useState } from "react";
 import useChatStore from "@/hooks/useChatStore";
+import { Message, UserData } from "@/lib/chat-data";
+import { ChatList } from "./chat-list";
+import ChatTopbar from "./chat-topbar";
 
 interface ChatProps {
   messages?: Message[];

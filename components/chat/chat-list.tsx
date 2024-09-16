@@ -1,19 +1,18 @@
-import { Message, UserData } from "@/app/data";
-import { cn } from "@/lib/utils";
-import React, { useRef, useEffect } from "react";
-import ChatBottombar from "./chat-bottombar";
+import { Message, UserData } from "@/lib/chat-data";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { AnimatePresence, motion } from "framer-motion";
+import { Forward, Heart } from "lucide-react";
+import { useEffect, useRef } from "react";
 import {
-  ChatBubbleAvatar,
-  ChatBubbleMessage,
-  ChatBubbleTimestamp,
   ChatBubble,
   ChatBubbleAction,
   ChatBubbleActionWrapper,
+  ChatBubbleAvatar,
+  ChatBubbleMessage,
+  ChatBubbleTimestamp,
 } from "../ui/chat/chat-bubble";
 import { ChatMessageList } from "../ui/chat/chat-message-list";
-import { DotsVerticalIcon, HeartIcon, Share1Icon } from "@radix-ui/react-icons";
-import { Forward, Heart } from "lucide-react";
+import ChatBottombar from "./chat-bottombar";
 
 interface ChatListProps {
   messages: Message[];

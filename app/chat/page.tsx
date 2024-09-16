@@ -1,28 +1,16 @@
-import { ChatMessageList } from "@/components/ui/chat/chat-message-list";
-import {
-  ChatBubble,
-  ChatBubbleAvatar,
-  ChatBubbleMessage,
-} from "@/components/ui/chat/chat-bubble";
-import { ChatInput } from "@/components/ui/chat/chat-input";
-import { Button } from "@/components/ui/button";
-import { CornerDownLeft } from "lucide-react";
+import { ChatLayout } from "@/components/chat/chat-layout";
+import { cookies } from "next/headers";
 
 export default function ChatPage() {
+  const layout = cookies().get("react-resizable-panels:layout");
+  const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
+
   return (
-    <>
-      <ChatMessageList>
-        <ChatBubble>
-          <ChatBubbleAvatar />
-          <ChatBubbleMessage>Message and other content here</ChatBubbleMessage>
-        </ChatBubble>
-      </ChatMessageList>
-      <div className="flex-1" />
-      <ChatInput placeholder="Type your message here..." />
-      <Button size="sm" className="ml-auto gap-1.5">
-        Send Message
-        <CornerDownLeft className="size-3.5" />
-      </Button>
-    </>
+    <div className="container">
+      <ChatLayout
+        defaultLayout={defaultLayout}
+        navCollapsedSize={8}
+      ></ChatLayout>
+    </div>
   );
 }
