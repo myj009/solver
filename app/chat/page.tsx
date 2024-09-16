@@ -6,7 +6,7 @@ export default function ChatPage() {
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   return (
-    <div className="container">
+    <div className="container max-h-[90vh] my-4 px-0 mx-auto border rounded-lg border-border">
       <ChatLayout
         defaultLayout={defaultLayout}
         navCollapsedSize={8}

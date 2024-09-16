@@ -88,7 +88,11 @@ export function ChatLayout({
         />
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+      <ResizablePanel
+        defaultSize={defaultLayout[1]}
+        minSize={30}
+        className="h-[90vh] max-h-[90vh] overflow-y-auto"
+      >
         <Chat
           messages={selectedUser.messages}
           selectedUser={selectedUser}
