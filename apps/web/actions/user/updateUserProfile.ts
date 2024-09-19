@@ -123,7 +123,6 @@ export async function updateExperience(
 
 export async function uploadProfileImage(userId: string, imageData: string) {
   try {
-    console.log(imageData, userId);
     const result = await cloudinary.uploader.upload(imageData, {
       folder: "profile_images",
     });

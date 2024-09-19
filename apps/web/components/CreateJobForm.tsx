@@ -32,8 +32,6 @@ const countries = Object.entries(Country).map(([label, value]) => ({
   value,
 }));
 
-console.log("Countries array:", countries);
-
 const formSchema = z.object({
   title: z.string().min(2).max(100),
   shortDescription: z.string().min(10).max(200),

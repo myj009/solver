@@ -1,14 +1,51 @@
 "use client";
 
-import React from "react";
-import { SessionProvider } from "next-auth/react";
+import React, { useEffect } from "react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
+import { connectSocket } from "@/lib/socket";
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }
 
-export default function Providers({ children }: { children: React.ReactNode }) {
-  return <SessionProvider>{children}</SessionProvider>;
+function SocketProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.JSX.Element {
+  const session = useSession();
+
+  useEffect(() => {
+    if (session && session.data?.user) {
+      const socket = connectSocket();
+      socket.connect();
+
+      socket.on("connect", () => {
+        console.log("Socket connnected", socket.id);
+      });
+    }
+  }, [session]);
+
+  return <>{children}</>;
+}
+
+export default function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.JSX.Element {
+  return (
+    <SessionProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <SocketProvider>{children}</SocketProvider>
+      </ThemeProvider>
+    </SessionProvider>
+  );
 }
