@@ -1,41 +1,42 @@
-import express from "express";
-import http from "http";
 import dotenv from "dotenv";
+import { createServer } from "./server";
+import { reachUser } from "./user/reach";
+import jwt from "jsonwebtoken";
+import { JwtUser } from "./types/user";
 import { Server } from "socket.io";
-import bodyParser from "body-parser";
-import cors from "cors";
+import { ISocket } from "./types/socket";
 
 dotenv.config();
 
-const app = express();
-app.use(bodyParser.json);
-
-const corsOptions = {
-  origin: ["http://localhost:3000"],
-  credentials: true,
-};
-app.use(cors(corsOptions));
-const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: corsOptions,
-});
-
-app.get("/", (req, res) => {
-  return res.send("Hellow");
-});
+const io = createServer();
 
 initEventHandlers({ io });
 
-server.listen(process.env.PORT || 8000, () => {
-  console.log(`Listening on port ${process.env.PORT}`);
-});
-
 function initEventHandlers({ io }: { io: Server }) {
+  io.use((socket, next) => {
+    const sock = socket as ISocket;
+    const token = sock.handshake.auth.token;
+    try {
+      const user = jwt.verify(
+        token,
+        process.env.JWT_TOKEN || "password"
+      ) as JwtUser;
+      sock.userId = user.userId;
+      next();
+    } catch (e) {
+      console.error(e);
+      const err = new Error("Not authorized: " + e);
+      next(err);
+    }
+  });
+
   io.on("connection", (socket) => {
-    console.log("user connected");
+    const sock = socket as ISocket;
+    console.log("user connected:", sock.userId);
     socket.on("disconnect", () => {
       console.log("user disconnected");
     });
+
+    socket.on("user:reach", reachUser(socket));
   });
 }

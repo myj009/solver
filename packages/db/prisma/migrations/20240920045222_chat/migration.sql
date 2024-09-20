@@ -14,7 +14,6 @@ CREATE TABLE "socket-io-attachments" (
 -- CreateTable
 CREATE TABLE "Channel" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
@@ -34,13 +33,10 @@ CREATE TABLE "Message" (
 CREATE TABLE "UserChannel" (
     "user_id" TEXT NOT NULL,
     "channel_id" TEXT NOT NULL,
-    "client_offset_id" TEXT NOT NULL,
+    "client_offset_id" TEXT,
 
     CONSTRAINT "UserChannel_pkey" PRIMARY KEY ("user_id","channel_id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "Channel_name_key" ON "Channel"("name");
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_from_user_id_fkey" FOREIGN KEY ("from_user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -55,4 +51,4 @@ ALTER TABLE "UserChannel" ADD CONSTRAINT "UserChannel_user_id_fkey" FOREIGN KEY 
 ALTER TABLE "UserChannel" ADD CONSTRAINT "UserChannel_channel_id_fkey" FOREIGN KEY ("channel_id") REFERENCES "Channel"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserChannel" ADD CONSTRAINT "UserChannel_client_offset_id_fkey" FOREIGN KEY ("client_offset_id") REFERENCES "Message"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserChannel" ADD CONSTRAINT "UserChannel_client_offset_id_fkey" FOREIGN KEY ("client_offset_id") REFERENCES "Message"("id") ON DELETE SET NULL ON UPDATE CASCADE;

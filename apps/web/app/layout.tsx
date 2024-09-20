@@ -30,19 +30,19 @@ export default function RootLayout({
 }>) {
   return (
     <html className="overflow-y-scroll no-scrollbar" lang="en">
-      <Providers>
-        <body
-          className={cn(
-            "antialiased min-h-screen",
-            fontHeading.variable,
-            fontBody.variable
-          )}
-        >
+      <body
+        className={cn(
+          "antialiased min-h-screen",
+          fontHeading.variable,
+          fontBody.variable
+        )}
+      >
+        <Providers>
           <Appbar />
           <div className="pt-16 min-h-screen">{children}</div>
           <Toaster />
-        </body>
-      </Providers>
+        </Providers>
+      </body>
     </html>
   );
 }

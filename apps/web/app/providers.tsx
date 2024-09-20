@@ -19,7 +19,7 @@ function SocketProvider({
 
   useEffect(() => {
     if (session && session.data?.user) {
-      const socket = connectSocket();
+      const socket = connectSocket(session.data.user.token);
       socket.connect();
 
       socket.on("connect", () => {

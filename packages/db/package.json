@@ -18,7 +18,8 @@
     "prisma": "^5.19.1"
   },
   "exports": {
-    "./client": "./src/index.ts"
+    "./client": "./src/index.ts",
+    "./src": "./src/index.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2"

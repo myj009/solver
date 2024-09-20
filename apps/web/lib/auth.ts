@@ -1,4 +1,4 @@
-import { AuthOptions, Session } from "next-auth";
+import { AuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import { ErrorHandler } from "@/lib/error";
 import { SignInSchema, SignUpSchema } from "@/lib/validators/auth.validators";
 import { PASSWORD_HASH_SALT_ROUNDS } from "@/lib/constants/auth";
+import jwt from "jsonwebtoken";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -107,7 +108,7 @@ export const authOptions: AuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       if (
         account &&
         (account.provider === "github" || account.provider === "google")
@@ -157,6 +158,14 @@ export const authOptions: AuthOptions = {
         token.name = user.name;
         token.picture = user.image;
         token.email = user.email || "";
+        token.token = jwt.sign(
+          {
+            userId: user.id,
+            email: user.email,
+          },
+          process.env.EXTERNAL_SECRET ?? "password",
+          { expiresIn: "30d" }
+        );
       }
       return token;
     },
@@ -165,6 +174,7 @@ export const authOptions: AuthOptions = {
         session.user.id = token.id;
         session.user.image = token.picture || "";
         session.user.email = token.email || "";
+        session.user.token = token.token;
       }
       return session;
     },

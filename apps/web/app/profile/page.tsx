@@ -13,6 +13,8 @@ export default async function ProfilePage() {
     redirect("/auth/signin");
   }
 
+  console.log(session.user);
+
   const user: UserWithExperienceAndEducation | null = await getUser(
     session.user.id
   );

@@ -6,6 +6,7 @@ declare module "next-auth" {
       id: string;
       image: string;
       email: string;
+      token: string;
     };
   }
 }
@@ -15,5 +16,6 @@ declare module "next-auth/jwt" {
     id: string;
     image: string;
     email: string;
+    token: string;
   }
 }
