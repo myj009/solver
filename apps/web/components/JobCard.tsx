@@ -17,7 +17,7 @@ interface JobCardProps {
 
 export default function JobCard({ job }: JobCardProps) {
   return (
-    <Card>
+    <Card className="bg-secondary">
       <CardHeader>
         <div className="flex flex-row gap-2 justify-between items-center">
           <div className="flex flex-col gap-2">
