@@ -1,8 +1,8 @@
 import {
   ChatBotMessages,
   Message,
-  UserData,
   userData,
+  UserData,
   Users,
 } from "@/lib/chat-data";
 import { create } from "zustand";

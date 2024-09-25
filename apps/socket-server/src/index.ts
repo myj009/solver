@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import { JwtUser } from "./types/user";
 import { Server } from "socket.io";
 import { ISocket } from "./types/socket";
+import { channelRoom, userRoom } from "./util";
+import { fetchUserChannels } from "./user/fetch";
 
 dotenv.config();
 
@@ -30,13 +32,28 @@ function initEventHandlers({ io }: { io: Server }) {
     }
   });
 
+  io.use(async (socket, next) => {
+    const sock = socket as ISocket;
+    if (!sock.userId) {
+      return next(new Error("Not authorized"));
+    }
+    sock.join(userRoom(sock.userId));
+
+    const channels = await fetchUserChannels(sock.userId);
+    channels.forEach((c) => {
+      sock.join(channelRoom(c.channelId));
+    });
+
+    next();
+  });
+
   io.on("connection", (socket) => {
     const sock = socket as ISocket;
     console.log("user connected:", sock.userId);
-    socket.on("disconnect", () => {
+    sock.on("disconnect", () => {
       console.log("user disconnected");
     });
 
-    socket.on("user:reach", reachUser(socket));
+    sock.on("user:reach", reachUser(io, sock));
   });
 }

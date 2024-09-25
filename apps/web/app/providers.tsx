@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { SessionProvider, useSession } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
-import { connectSocket } from "@/lib/socket";
+import { connectSocket, disconnectSocket } from "@/lib/socket/index";
 
 function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
@@ -25,6 +25,10 @@ function SocketProvider({
       socket.on("connect", () => {
         console.log("Socket connnected", socket.id);
       });
+
+      return () => {
+        disconnectSocket();
+      };
     }
   }, [session]);
 

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   acceptApplication,
   rejectApplication,
@@ -71,6 +73,11 @@ export default function JobApplicationsTableActions({
         <DropdownMenuItem asChild>
           <Link href={`/developer/${application.developer.id}`}>
             View Developer Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={`/chat?userId=${application.developerId}`}>
+            Chat with Developer
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

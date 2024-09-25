@@ -133,7 +133,7 @@ export default function UserEducationComponent({
           {user.UserEducation.map((education) => (
             <div
               key={education.id}
-              className="p-2 pt-1 bg-muted rounded-md border border-muted-foreground"
+              className="p-2 pt-1 bg-card rounded-md border border-muted-foreground"
             >
               <div className="flex justify-between items-center">
                 <h3 className="font-semibold text-base">

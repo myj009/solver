@@ -56,3 +56,20 @@ export type UserWithExperienceAndEducation = Prisma.UserGetPayload<{
     UserEducation: true;
   };
 }>;
+
+export type ChannelWithUsers = Prisma.ChannelGetPayload<{
+  include: {
+    UserChannels: {
+      include: {
+        user: {
+          select: {
+            id: true;
+            name: true;
+            email: true;
+            image: true;
+          };
+        };
+      };
+    };
+  };
+}>;

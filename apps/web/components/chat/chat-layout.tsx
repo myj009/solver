@@ -1,40 +1,75 @@
 "use client";
 
+import { IChat } from "@/app/chat/layout";
 import { Sidebar } from "@/components/ui/chat/chat-sidebar";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { userData } from "@/lib/chat-data";
+import { connectSocket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
+import { connect } from "http2";
+import { useSession } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Chat } from "./chat";
 
 interface ChatLayoutProps {
+  children: React.ReactNode;
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
+  chats: IChat[] | null;
 }
 
 export function ChatLayout({
+  children,
   defaultLayout = [320, 480],
   defaultCollapsed = false,
   navCollapsedSize,
+  chats,
 }: ChatLayoutProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const { data: session, status } = useSession();
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedUser, setSelectedUser] = React.useState(userData[0]);
   const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/auth/signin");
+    }
+  }, [router, status]);
+
+  useEffect(() => {
+    async function reachUserSocket() {
+      if (session && session.user) {
+        const socket = connectSocket(session.user.token);
+        const res = await socket.emitWithAck("user:reach", { userId });
+        console.log(res);
+      }
+    }
+
+    const userId = searchParams.get("userId");
+    if (!userId && chats && chats.length > 0) {
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.set("userId", chats[0].user.id);
+
+      router.replace(`/chat?${newSearchParams.toString()}`);
+    }
+
+    if (userId) {
+      reachUserSocket();
+    }
+  }, [chats, router, searchParams, session]);
 
   useEffect(() => {
     const checkScreenWidth = () => {
       setIsMobile(window.innerWidth <= 768);
     };
 
-    // Initial check
     checkScreenWidth();
-
-    // Event listener for screen width changes
     window.addEventListener("resize", checkScreenWidth);
 
     // Cleanup the event listener on component unmount
@@ -42,6 +77,10 @@ export function ChatLayout({
       window.removeEventListener("resize", checkScreenWidth);
     };
   }, []);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   return (
     <ResizablePanelGroup
@@ -78,11 +117,11 @@ export function ChatLayout({
       >
         <Sidebar
           isCollapsed={isCollapsed || isMobile}
-          chats={userData.map((user) => ({
-            name: user.name,
-            messages: user.messages ?? [],
-            avatar: user.avatar,
-            variant: selectedUser.name === user.name ? "secondary" : "ghost",
+          chats={chats?.map((chat) => ({
+            id: chat.id,
+            name: chat.user.name || chat.user.email,
+            avatar: chat.user.image,
+            variant: searchParams === chat.user.id ? "secondary" : "ghost",
           }))}
           isMobile={isMobile}
         />
@@ -93,11 +132,7 @@ export function ChatLayout({
         minSize={30}
         className="h-[90vh] max-h-[90vh] overflow-y-auto"
       >
-        <Chat
-          messages={selectedUser.messages}
-          selectedUser={selectedUser}
-          isMobile={isMobile}
-        />
+        {children}
       </ResizablePanel>
     </ResizablePanelGroup>
   );

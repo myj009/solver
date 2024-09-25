@@ -1,24 +1,23 @@
 "use client";
 
-import Link from "next/link";
-import { MoreHorizontal, SquarePen } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
   TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Message } from "@/lib/chat-data";
+import { cn } from "@/lib/utils";
+import { MoreHorizontal, SquarePen } from "lucide-react";
+import Link from "next/link";
 
 interface SidebarProps {
   isCollapsed: boolean;
-  chats: {
+  chats?: {
+    id: string;
     name: string;
-    messages: Message[];
-    avatar: string;
+    avatar: string | null;
     variant: "secondary" | "ghost";
   }[];
   onClick?: () => void;
@@ -35,7 +34,7 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
         <div className="flex justify-between p-2 items-center">
           <div className="flex gap-2 items-center text-2xl">
             <p className="font-medium">Chats</p>
-            <span className="text-zinc-300">({chats.length})</span>
+            <span className="text-zinc-300">({chats ? chats.length : 0})</span>
           </div>
 
           <div>
@@ -62,7 +61,7 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
         </div>
       )}
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        {chats.map((chat, index) =>
+        {chats?.map((chat, index) =>
           isCollapsed ? (
             <TooltipProvider key={index}>
               <Tooltip key={index} delayDuration={0}>
@@ -78,8 +77,8 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
                   >
                     <Avatar className="flex justify-center items-center">
                       <AvatarImage
-                        src={chat.avatar}
-                        alt={chat.avatar}
+                        src={chat.avatar ?? undefined}
+                        alt={chat.avatar ?? undefined}
                         width={6}
                         height={6}
                         className="w-10 h-10 "
@@ -109,8 +108,8 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
             >
               <Avatar className="flex justify-center items-center">
                 <AvatarImage
-                  src={chat.avatar}
-                  alt={chat.avatar}
+                  src={chat.avatar ?? undefined}
+                  alt={chat.avatar ?? undefined}
                   width={6}
                   height={6}
                   className="w-10 h-10 "
@@ -118,15 +117,6 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
               </Avatar>
               <div className="flex flex-col max-w-28">
                 <span>{chat.name}</span>
-                {chat.messages.length > 0 && (
-                  <span className="text-zinc-300 text-xs truncate ">
-                    {chat.messages[chat.messages.length - 1].name.split(" ")[0]}
-                    :{" "}
-                    {chat.messages[chat.messages.length - 1].isLoading
-                      ? "Typing..."
-                      : chat.messages[chat.messages.length - 1].message}
-                  </span>
-                )}
               </div>
             </Link>
           )

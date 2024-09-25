@@ -1,6 +1,7 @@
 "use client";
 
 import { io, Socket } from "socket.io-client";
+import { bindEvents } from "./events";
 
 let socket: Socket | null;
 
@@ -14,6 +15,8 @@ export const connectSocket = (token: string) => {
         token,
       },
     });
+
+    bindEvents(socket);
   }
 
   return socket;
