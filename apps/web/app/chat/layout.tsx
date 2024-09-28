@@ -1,10 +1,11 @@
 import { getUserChats } from "@/actions/chat/getUserChats";
 import { ChatLayout } from "@/components/chat/chat-layout";
 import { cookies } from "next/headers";
+import React from "react";
 
 export interface IChat {
   id: string;
-  user: {
+  toUser: {
     id: string;
     name: string | null;
     email: string;
@@ -20,7 +21,7 @@ export default async function ChatPage({
   const layout = cookies().get("react-resizable-panels:layout");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
-  const chats = await getUserChats();
+  const chats: IChat[] | null = await getUserChats();
 
   return (
     <div className="container max-h-[90vh] my-4 px-0 mx-auto border rounded-lg border-border">

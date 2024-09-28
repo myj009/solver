@@ -16,6 +16,8 @@ export function reachUser(io: Server, socket: ISocket) {
       return;
     }
 
+    let status = "OK";
+
     try {
       let channel = await prisma.channel.findFirst({
         where: {
@@ -38,6 +40,7 @@ export function reachUser(io: Server, socket: ISocket) {
         },
         select: { id: true },
       });
+
       if (!channel) {
         channel = await prisma.channel.create({
           data: {
@@ -50,6 +53,7 @@ export function reachUser(io: Server, socket: ISocket) {
 
         // broadcast to other tabs of the same user
         socket.to(userRoom(socket.userId)).emit("channel:created", channel);
+        status = "NEW";
       }
 
       io.in(userRoom(socket.userId))
@@ -58,7 +62,7 @@ export function reachUser(io: Server, socket: ISocket) {
 
       console.log("User reached", channel);
       callback({
-        status: "OK",
+        status: status,
         data: channel,
       });
     } catch (e) {

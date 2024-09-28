@@ -9,17 +9,19 @@ import {
   ChatBubbleTimestamp,
 } from "@/components/ui/chat/chat-bubble";
 import { ChatMessageList } from "@/components/ui/chat/chat-message-list";
-import { Message, UserData } from "@/lib/chat-data";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { Forward, Heart } from "lucide-react";
 import { useEffect, useRef } from "react";
 import ChatBottombar from "./chat-bottombar";
+import { UserMin } from "@/types/prisma-types";
+import { Message } from "@prisma/client";
+import Avatar from "boring-avatars";
 
 interface ChatListProps {
   messages: Message[];
-  selectedUser: UserData;
-  sendMessage: (newMessage: Message) => void;
+  selectedUser: UserMin;
+  // sendMessage: (newMessage: Message) => void;
   isMobile: boolean;
 }
 
@@ -29,7 +31,7 @@ const getMessageVariant = (messageName: string, selectedUserName: string) =>
 export function ChatList({
   messages,
   selectedUser,
-  sendMessage,
+  // sendMessage,
   isMobile,
 }: ChatListProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,10 @@ export function ChatList({
       <ChatMessageList ref={messagesContainerRef}>
         <AnimatePresence>
           {messages.map((message, index) => {
-            const variant = getMessageVariant(message.name, selectedUser.name);
+            const variant = getMessageVariant(
+              message.fromUserId,
+              selectedUser.id
+            );
             return (
               <motion.div
                 key={index}
@@ -73,14 +78,21 @@ export function ChatList({
               >
                 {/* Usage of ChatBubble component */}
                 <ChatBubble variant={variant}>
-                  <ChatBubbleAvatar src={message.avatar} />
+                  {/* <ChatBubbleAvatar src={message.avatar} /> */}
+                  <Avatar
+                    name={message.fromUserId}
+                    variant="beam"
+                    className="h-9 w-9"
+                  />
                   <ChatBubbleMessage
                     variant={variant}
-                    isLoading={message.isLoading}
+                    // isLoading={message.isLoading}
                   >
-                    {message.message}
-                    {message.timestamp && (
-                      <ChatBubbleTimestamp timestamp={message.timestamp} />
+                    {message.content}
+                    {message.createdAt && (
+                      <ChatBubbleTimestamp
+                        timestamp={message.createdAt.toDateString()}
+                      />
                     )}
                   </ChatBubbleMessage>
                   <ChatBubbleActionWrapper variant={variant}>

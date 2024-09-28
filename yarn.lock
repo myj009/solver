@@ -2452,6 +2452,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"boring-avatars@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "boring-avatars@npm:1.11.2"
+  checksum: 10c0/b574bbbd926faeca7615c82a1bc2e0dda85803ed677c5e243b27cdda7b1ee97289d53f81bfe89087429b73897e2a329e306f13fd65c279e23b394595cfa15828
+  languageName: node
+  linkType: hard
+
 "brace-expansion@npm:^1.1.7":
   version: 1.1.11
   resolution: "brace-expansion@npm:1.1.11"
@@ -8598,6 +8605,7 @@ __metadata:
     "@types/react-dom": "npm:^18"
     "@uiw/react-md-editor": "npm:^4.0.4"
     bcrypt: "npm:^5.1.1"
+    boring-avatars: "npm:^1.11.2"
     class-variance-authority: "npm:^0.7.0"
     cloudinary: "npm:^2.4.0"
     clsx: "npm:^2.1.1"

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import BoringAvatar from "boring-avatars";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,17 +15,28 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { CreateJobForm } from "./CreateJobForm";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
-export default function ProfileDropdown({ image }: { image: string }) {
+export default function ProfileDropdown() {
+  const { data } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  if (!data || !data.user) {
+    return null;
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className="cursor-pointer">
-          <AvatarImage src={image ?? undefined} alt="@MJ" />
-          <AvatarFallback>MJ</AvatarFallback>
-        </Avatar>
+        {data.user.image && data.user.image != "" ? (
+          <Avatar className="cursor-pointer">
+            <AvatarImage src={data.user.image ?? undefined} alt="@MJ" />
+            <AvatarFallback>MJ</AvatarFallback>
+          </Avatar>
+        ) : (
+          <BoringAvatar size={35} name={data.user.id} variant="beam" />
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem className="cursor-pointer" asChild>

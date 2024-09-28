@@ -1,5 +1,5 @@
 import prisma from "@repo/db/client";
-import { UserWithExperienceAndEducation } from "@/types/prisma-types";
+import { UserMin, UserWithExperienceAndEducation } from "@/types/prisma-types";
 
 export async function getUser(id: string) {
   const user: UserWithExperienceAndEducation | null =
@@ -18,6 +18,20 @@ export async function getUser(id: string) {
         },
       },
     });
+
+  return user;
+}
+
+export async function getUserMin(id: string) {
+  const user: UserMin | null = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+    },
+  });
 
   return user;
 }

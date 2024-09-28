@@ -123,6 +123,8 @@ model Message {
   channel Channel @relation(fields: [channelId], references: [id])
   content String
 
+  createdAt DateTime @default(now()) @map("created_at")
+
   UserChannel UserChannel[]
 }
 

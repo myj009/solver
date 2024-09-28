@@ -21,6 +21,7 @@ import { ModeToggle } from "./ThemeToggle";
 
 export default async function Appbar() {
   const session = await getServerSession(authOptions);
+  console.log(session?.user);
 
   return (
     <header className="fixed top-0 z-50 w-full bg-background shadow-sm">
@@ -137,9 +138,7 @@ export default async function Appbar() {
         <div className="flex gap-4">
           <ModeToggle />
           <AuthButton />
-          {session && session?.user && (
-            <ProfileDropdown image={session.user.image} />
-          )}
+          {session && session?.user && <ProfileDropdown />}
         </div>
       </div>
       <Separator className="w-full" />

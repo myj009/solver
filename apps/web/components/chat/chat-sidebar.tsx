@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import BoringAvatar from "boring-avatars";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,
@@ -16,6 +17,7 @@ interface SidebarProps {
   isCollapsed: boolean;
   chats?: {
     id: string;
+    userId: string;
     name: string;
     avatar: string | null;
     variant: "secondary" | "ghost";
@@ -67,7 +69,7 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
               <Tooltip key={index} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Link
-                    href="#"
+                    href={`?userId=${chat.userId}`}
                     className={cn(
                       buttonVariants({ variant: chat.variant, size: "icon" }),
                       "h-11 w-11 md:h-16 md:w-16",
@@ -75,15 +77,20 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
                         "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                     )}
                   >
-                    <Avatar className="flex justify-center items-center">
-                      <AvatarImage
-                        src={chat.avatar ?? undefined}
-                        alt={chat.avatar ?? undefined}
-                        width={6}
-                        height={6}
-                        className="w-10 h-10 "
-                      />
-                    </Avatar>{" "}
+                    {chat.avatar ? (
+                      <Avatar className="flex justify-center items-center">
+                        <AvatarImage
+                          src={chat.avatar ?? undefined}
+                          alt={chat.avatar ?? undefined}
+                          width={6}
+                          height={6}
+                          className="w-10 h-10 "
+                        />
+                      </Avatar>
+                    ) : (
+                      <BoringAvatar size={35} name={chat.id} variant="beam" />
+                    )}
+
                     <span className="sr-only">{chat.name}</span>
                   </Link>
                 </TooltipTrigger>
@@ -98,7 +105,7 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
           ) : (
             <Link
               key={index}
-              href="#"
+              href={`?userId=${chat.userId}`}
               className={cn(
                 buttonVariants({ variant: chat.variant, size: "lg" }),
                 chat.variant === "secondary" &&
@@ -106,15 +113,20 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
                 "justify-start gap-4"
               )}
             >
-              <Avatar className="flex justify-center items-center">
-                <AvatarImage
-                  src={chat.avatar ?? undefined}
-                  alt={chat.avatar ?? undefined}
-                  width={6}
-                  height={6}
-                  className="w-10 h-10 "
-                />
-              </Avatar>
+              {chat.avatar ? (
+                <Avatar className="flex justify-center items-center">
+                  <AvatarImage
+                    src={chat.avatar ?? undefined}
+                    alt={chat.avatar ?? undefined}
+                    width={6}
+                    height={6}
+                    className="w-10 h-10 "
+                  />
+                </Avatar>
+              ) : (
+                <BoringAvatar size={35} name={chat.id} variant="beam" />
+              )}
+
               <div className="flex flex-col max-w-28">
                 <span>{chat.name}</span>
               </div>

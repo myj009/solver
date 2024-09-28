@@ -1,31 +1,33 @@
-import useChatStore from "@/hooks/useChatStore";
-import { Message, UserData } from "@/lib/chat-data";
+"use client";
+
 import { ChatList } from "./chat-list";
 import ChatTopbar from "./chat-topbar";
+import { UserMin } from "@/types/prisma-types";
+import { Message } from "@prisma/client";
 
 interface ChatProps {
-  messages?: Message[];
-  selectedUser: UserData;
+  messages: Message[];
+  selectedUser: UserMin;
   isMobile: boolean;
 }
 
 export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
-  const messagesState = useChatStore((state) => state.messages);
+  // const messagesState = useChatStore((state) => state.messages);
 
-  const sendMessage = (newMessage: Message) => {
-    useChatStore.setState((state) => ({
-      messages: [...state.messages, newMessage],
-    }));
-  };
+  // const sendMessage = (newMessage: Message) => {
+  //   useChatStore.setState((state) => ({
+  //     messages: [...state.messages, newMessage],
+  //   }));
+  // };
 
   return (
     <div className="flex flex-col justify-between w-full h-full">
       <ChatTopbar selectedUser={selectedUser} />
 
       <ChatList
-        messages={messagesState}
+        messages={messages}
         selectedUser={selectedUser}
-        sendMessage={sendMessage}
+        // sendMessage={sendMessage}
         isMobile={isMobile}
       />
     </div>

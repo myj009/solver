@@ -1,7 +1,7 @@
 "use client";
 
 import { IChat } from "@/app/chat/layout";
-import { Sidebar } from "@/components/ui/chat/chat-sidebar";
+import { Sidebar } from "./chat-sidebar";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -31,6 +31,7 @@ export function ChatLayout({
 }: ChatLayoutProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const userId = searchParams.get("userId");
 
   const { data: session, status } = useSession();
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
@@ -48,13 +49,15 @@ export function ChatLayout({
         const socket = connectSocket(session.user.token);
         const res = await socket.emitWithAck("user:reach", { userId });
         console.log(res);
+        if (res.status == "NEW") {
+          router.refresh();
+        }
       }
     }
 
-    const userId = searchParams.get("userId");
     if (!userId && chats && chats.length > 0) {
       const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.set("userId", chats[0].user.id);
+      newSearchParams.set("userId", chats[0].toUser.id);
 
       router.replace(`/chat?${newSearchParams.toString()}`);
     }
@@ -62,7 +65,7 @@ export function ChatLayout({
     if (userId) {
       reachUserSocket();
     }
-  }, [chats, router, searchParams, session]);
+  }, [chats, router, searchParams, session, userId]);
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -119,9 +122,10 @@ export function ChatLayout({
           isCollapsed={isCollapsed || isMobile}
           chats={chats?.map((chat) => ({
             id: chat.id,
-            name: chat.user.name || chat.user.email,
-            avatar: chat.user.image,
-            variant: searchParams === chat.user.id ? "secondary" : "ghost",
+            userId: chat.toUser.id,
+            name: chat.toUser.name || chat.toUser.email,
+            avatar: chat.toUser.image,
+            variant: userId === chat.toUser.id ? "secondary" : "ghost",
           }))}
           isMobile={isMobile}
         />
