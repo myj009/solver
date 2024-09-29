@@ -21,17 +21,17 @@ import Avatar from "boring-avatars";
 interface ChatListProps {
   messages: Message[];
   selectedUser: UserMin;
-  // sendMessage: (newMessage: Message) => void;
+  sendMessage: (newMessage: string) => void;
   isMobile: boolean;
 }
 
 const getMessageVariant = (messageName: string, selectedUserName: string) =>
-  messageName !== selectedUserName ? "sent" : "received";
+  messageName === selectedUserName ? "received" : "sent";
 
 export function ChatList({
   messages,
   selectedUser,
-  // sendMessage,
+  sendMessage,
   isMobile,
 }: ChatListProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -74,7 +74,7 @@ export function ChatList({
                   },
                 }}
                 style={{ originX: 0.5, originY: 0.5 }}
-                className="flex flex-col gap-2 p-4"
+                className="flex flex-col gap-2 p-2"
               >
                 {/* Usage of ChatBubble component */}
                 <ChatBubble variant={variant}>
@@ -115,7 +115,7 @@ export function ChatList({
           })}
         </AnimatePresence>
       </ChatMessageList>
-      <ChatBottombar isMobile={isMobile} />
+      <ChatBottombar isMobile={isMobile} sendMessage={sendMessage} />
     </div>
   );
 }

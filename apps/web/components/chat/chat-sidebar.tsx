@@ -36,7 +36,7 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
         <div className="flex justify-between p-2 items-center">
           <div className="flex gap-2 items-center text-2xl">
             <p className="font-medium">Chats</p>
-            <span className="text-zinc-300">({chats ? chats.length : 0})</span>
+            <span className="">({chats ? chats.length : 0})</span>
           </div>
 
           <div>
@@ -88,7 +88,11 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
                         />
                       </Avatar>
                     ) : (
-                      <BoringAvatar size={35} name={chat.id} variant="beam" />
+                      <BoringAvatar
+                        size={35}
+                        name={chat.userId}
+                        variant="beam"
+                      />
                     )}
 
                     <span className="sr-only">{chat.name}</span>
@@ -124,7 +128,7 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
                   />
                 </Avatar>
               ) : (
-                <BoringAvatar size={35} name={chat.id} variant="beam" />
+                <BoringAvatar size={35} name={chat.userId} variant="beam" />
               )}
 
               <div className="flex flex-col max-w-28">

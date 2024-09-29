@@ -1,12 +1,11 @@
 import { EmojiPicker } from "@/components/EmojiPicker";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { ChatInput } from "@/components/ui/chat/chat-input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useChatStore from "@/hooks/useChatStore";
-import { Message, loggedInUserData } from "@/lib/chat-data";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -19,54 +18,39 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { ChatInput } from "@/components/ui/chat/chat-input";
 
 interface ChatBottombarProps {
   isMobile: boolean;
+  sendMessage: (newMessage: string) => void;
 }
 
 export const BottombarIcons = [{ icon: FileImage }, { icon: Paperclip }];
 
-export default function ChatBottombar({ isMobile }: ChatBottombarProps) {
+export default function ChatBottombar({
+  isMobile,
+  sendMessage,
+}: ChatBottombarProps) {
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const setMessages = useChatStore((state) => state.setMessages);
-  const hasInitialResponse = useChatStore((state) => state.hasInitialResponse);
-  const setHasInitialResponse = useChatStore(
-    (state) => state.setHasInitialResponse
-  );
+  // const setMessages = useChatStore((state) => state.setMessages);
+  // const hasInitialResponse = useChatStore((state) => state.hasInitialResponse);
+  // const setHasInitialResponse = useChatStore(
+  //   (state) => state.setHasInitialResponse
+  // );
   const [isLoading, setisLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
   };
 
-  const sendMessage = (newMessage: Message) => {
-    useChatStore.setState((state) => ({
-      messages: [...state.messages, newMessage],
-    }));
-  };
-
   const handleThumbsUp = () => {
-    const newMessage: Message = {
-      id: message.length + 1,
-      name: loggedInUserData.name,
-      avatar: loggedInUserData.avatar,
-      message: "👍",
-    };
-    sendMessage(newMessage);
+    sendMessage("👍");
     setMessage("");
   };
 
   const handleSend = () => {
     if (message.trim()) {
-      const newMessage: Message = {
-        id: message.length + 1,
-        name: loggedInUserData.name,
-        avatar: loggedInUserData.avatar,
-        message: message.trim(),
-      };
-      sendMessage(newMessage);
+      sendMessage(message);
       setMessage("");
 
       if (inputRef.current) {
@@ -86,24 +70,24 @@ export default function ChatBottombar({ isMobile }: ChatBottombarProps) {
       inputRef.current.focus();
     }
 
-    if (!hasInitialResponse) {
-      setisLoading(true);
-      setTimeout(() => {
-        setMessages((messages) => [
-          ...messages.slice(0, messages.length - 1),
-          {
-            id: messages.length + 1,
-            avatar:
-              "https://images.freeimages.com/images/large-previews/971/basic-shape-avatar-1632968.jpg?fmt=webp&h=350",
-            name: "Jane Doe",
-            message: "Awesome! I am just chilling outside.",
-            timestamp: formattedTime,
-          },
-        ]);
-        setisLoading(false);
-        setHasInitialResponse(true);
-      }, 2500);
-    }
+    // if (!hasInitialResponse) {
+    //   setisLoading(true);
+    //   setTimeout(() => {
+    //     setMessages((messages) => [
+    //       ...messages.slice(0, messages.length - 1),
+    //       {
+    //         id: messages.length + 1,
+    //         avatar:
+    //           "https://images.freeimages.com/images/large-previews/971/basic-shape-avatar-1632968.jpg?fmt=webp&h=350",
+    //         name: "Jane Doe",
+    //         message: "Awesome! I am just chilling outside.",
+    //         timestamp: formattedTime,
+    //       },
+    //     ]);
+    //     setisLoading(false);
+    //     setHasInitialResponse(true);
+    //   }, 2500);
+    // }
   }, []);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {

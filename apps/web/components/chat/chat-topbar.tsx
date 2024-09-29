@@ -2,7 +2,6 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { ExpandableChatHeader } from "@/components/ui/chat/expandable-chat";
 import BoringAvatar from "boring-avatars";
-import { UserData } from "@/lib/chat-data";
 import { cn } from "@/lib/utils";
 import { UserMin } from "@/types/prisma-types";
 import { Info, Phone, Video } from "lucide-react";

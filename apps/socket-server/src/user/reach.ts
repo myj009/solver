@@ -1,7 +1,7 @@
 import prisma from "@repo/db/src";
 import * as z from "zod";
 import { ISocket } from "../types/socket";
-import { userRoom } from "../util";
+import { channelRoom, userRoom } from "../util";
 import { Server } from "socket.io";
 
 const PayloadType = z.object({
@@ -58,7 +58,7 @@ export function reachUser(io: Server, socket: ISocket) {
 
       io.in(userRoom(socket.userId))
         .in(userRoom(payload.userId))
-        .socketsJoin(`channel:${channel.id}`);
+        .socketsJoin(channelRoom(channel.id));
 
       console.log("User reached", channel);
       callback({

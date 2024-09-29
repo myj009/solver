@@ -1,13 +1,10 @@
-import { Chat } from "@/components/chat/chat";
-import { userData } from "@/lib/chat-data";
-import { IChat } from "./layout";
-import React from "react";
+import { getChatMessages } from "@/actions/chat/getChatMessages";
 import { getUserChat } from "@/actions/chat/getUserChats";
-import { getUserMin } from "@/actions/user/getUser";
-import { getServerSession } from "next-auth";
+import { Chat } from "@/components/chat/chat";
 import { authOptions } from "@/lib/auth";
 import { Message } from "@prisma/client";
-import { getChatMessages } from "@/actions/chat/getChatMessages";
+import { getServerSession } from "next-auth";
+import { IChat } from "./layout";
 
 const ChatPage = async ({
   searchParams: { userId },
@@ -24,9 +21,15 @@ const ChatPage = async ({
   }
 
   const messages: Message[] = await getChatMessages(chat.id);
+  console.log(messages);
 
   return (
-    <Chat messages={messages} selectedUser={chat.toUser} isMobile={false} />
+    <Chat
+      initialMessages={messages}
+      selectedUser={chat.toUser}
+      isMobile={false}
+      channelId={chat.id}
+    />
   );
 };
 

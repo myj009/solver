@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import { ISocket } from "./types/socket";
 import { channelRoom, userRoom } from "./util";
 import { fetchUserChannels } from "./user/fetch";
+import { sendMessage } from "./chat/sendMessage";
 
 dotenv.config();
 
@@ -55,5 +56,6 @@ function initEventHandlers({ io }: { io: Server }) {
     });
 
     sock.on("user:reach", reachUser(io, sock));
+    sock.on("message:send", sendMessage(io, sock));
   });
 }
