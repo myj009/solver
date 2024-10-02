@@ -1,34 +1,51 @@
-import { getChatMessages } from "@/actions/chat/getChatMessages";
-import { getUserChatWithMessages } from "@/actions/chat/getUserChats";
-import { Chat } from "@/components/chat/chat";
-import { authOptions } from "@/lib/auth";
-import { Message } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { IChat, IChatWithMessages } from "./types";
+"use client";
 
-const ChatPage = async ({
-  searchParams: { userId },
-}: {
-  searchParams: { userId: string };
-}) => {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user) {
+import { Chat } from "@/components/chat/chat";
+import { useAtom, useSetAtom } from "jotai";
+import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { chatAtom, chatStore, messageAtom } from "../store";
+
+const ChatPage = () => {
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId");
+  const { data } = useSession();
+  const [chat] = useAtom(chatAtom(userId));
+  const setMessages = useSetAtom(messageAtom);
+
+  useEffect(() => {
+    const syncMessages = async () => {
+      if (chat.state === "hasData" && chat.data) {
+        setMessages(chat.data.messages);
+      }
+    };
+    syncMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chat.state, setMessages]);
+
+  if (!data || !data.user) {
     return <div>Unauthenticated</div>;
   }
-  const chat: IChatWithMessages | null = await getUserChatWithMessages(
-    session.user.id,
-    userId
-  );
-  if (!chat) {
+
+  if (!userId) {
+    return <div>No user selected</div>;
+  }
+
+  if (chat.state === "hasError") {
+    console.log(chat.error);
     return <div>User not found</div>;
+  }
+
+  if (chat.state === "loading" || !chat.data) {
+    return <div>Loading...</div>;
   }
 
   return (
     <Chat
-      initialMessages={chat.Messages}
-      selectedUser={chat.toUser}
+      selectedUser={chat.data.toUser}
       isMobile={false}
-      channelId={chat.id}
+      channelId={chat.data.id}
     />
   );
 };

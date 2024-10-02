@@ -6,6 +6,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
 import { connectSocket, disconnectSocket } from "@/lib/socket/index";
 import { Provider as JotaiProvider } from "jotai";
+import { chatStore } from "./store";
 
 function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
@@ -49,7 +50,7 @@ export default function Providers({
         enableSystem
         disableTransitionOnChange
       >
-        <JotaiProvider>
+        <JotaiProvider store={chatStore}>
           <SocketProvider>{children}</SocketProvider>
         </JotaiProvider>
       </ThemeProvider>

@@ -18,5 +18,5 @@ export interface IChatWithMessages {
     email: string;
     image: string | null;
   };
-  Messages: Message[];
+  messages: Message[];
 }

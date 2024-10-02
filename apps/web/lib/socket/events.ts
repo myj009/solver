@@ -1,3 +1,5 @@
+import { updateMessageAtom } from "@/app/store";
+import { Message } from "@prisma/client";
 import { Socket } from "socket.io-client";
 
 export function bindEvents(socket: Socket) {
@@ -9,7 +11,8 @@ export function bindEvents(socket: Socket) {
     console.log("outgoing", event, args);
   });
 
-  socket.on("message:created", (message) => {
-    console.log("message:created", message);
+  socket.on("message:created", (message: Message) => {
+    console.log(message);
+    updateMessageAtom(message);
   });
 }

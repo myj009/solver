@@ -35,12 +35,12 @@ const flattenChatsWithMessages = (
     return {
       id: chat.id,
       toUser: toUser,
-      Messages: chat.Messages,
+      messages: chat.Messages,
     };
   });
 };
 
-export async function getUserChatWithMessages(user1: string, user2: string) {
+export async function getUserChatWithMessages(toUserId: string) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     return null;
@@ -53,14 +53,14 @@ export async function getUserChatWithMessages(user1: string, user2: string) {
           {
             UserChannels: {
               some: {
-                userId: user1,
+                userId: session.user.id,
               },
             },
           },
           {
             UserChannels: {
               some: {
-                userId: user2,
+                userId: toUserId,
               },
             },
           },

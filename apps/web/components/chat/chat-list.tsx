@@ -17,9 +17,10 @@ import ChatBottombar from "./chat-bottombar";
 import { UserMin } from "@/types/prisma-types";
 import { Message } from "@prisma/client";
 import Avatar from "boring-avatars";
+import { useAtomValue } from "jotai";
+import { messageAtom } from "@/app/store";
 
 interface ChatListProps {
-  messages: Message[];
   selectedUser: UserMin;
   sendMessage: (newMessage: string) => void;
   isMobile: boolean;
@@ -29,12 +30,13 @@ const getMessageVariant = (messageName: string, selectedUserName: string) =>
   messageName === selectedUserName ? "received" : "sent";
 
 export function ChatList({
-  messages,
   selectedUser,
   sendMessage,
   isMobile,
 }: ChatListProps) {
+  const messages = useAtomValue(messageAtom);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  console.log("rerendering chat-list", messages);
 
   useEffect(() => {
     if (messagesContainerRef.current) {

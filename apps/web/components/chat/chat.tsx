@@ -1,31 +1,26 @@
 "use client";
 
+import { messageAtom } from "@/app/store";
 import { connectSocket } from "@/lib/socket";
-import { ChatList } from "./chat-list";
-import ChatTopbar from "./chat-topbar";
 import { UserMin } from "@/types/prisma-types";
 import { Message } from "@prisma/client";
+import { useAtom, useSetAtom } from "jotai";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { ChatList } from "./chat-list";
+import ChatTopbar from "./chat-topbar";
 
 interface ChatProps {
-  initialMessages: Message[];
   selectedUser: UserMin;
   isMobile: boolean;
   channelId: string;
 }
 
-export function Chat({
-  initialMessages,
-  selectedUser,
-  isMobile,
-  channelId,
-}: ChatProps) {
-  // const messagesState = useChatStore((state) => state.messages);
+export function Chat({ selectedUser, isMobile, channelId }: ChatProps) {
   const { data } = useSession();
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const setMessages = useSetAtom(messageAtom);
+
   if (!data || !data.user) {
-    return null;
+    return <div>Unauthenticated</div>;
   }
 
   const sendMessage = async (newMessage: string) => {
@@ -48,7 +43,6 @@ export function Chat({
       <ChatTopbar selectedUser={selectedUser} />
 
       <ChatList
-        messages={messages}
         selectedUser={selectedUser}
         sendMessage={sendMessage}
         isMobile={isMobile}
