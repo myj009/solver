@@ -82,3 +82,21 @@ export type ChannelWithUsers = Prisma.ChannelGetPayload<{
     };
   };
 }>;
+
+export type ChannelWithUsersAndMessages = Prisma.ChannelGetPayload<{
+  include: {
+    UserChannels: {
+      include: {
+        user: {
+          select: {
+            id: true;
+            name: true;
+            email: true;
+            image: true;
+          };
+        };
+      };
+    };
+    Messages: true;
+  };
+}>;

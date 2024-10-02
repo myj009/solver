@@ -5,6 +5,7 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
 import { connectSocket, disconnectSocket } from "@/lib/socket/index";
+import { Provider as JotaiProvider } from "jotai";
 
 function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
@@ -48,7 +49,9 @@ export default function Providers({
         enableSystem
         disableTransitionOnChange
       >
-        <SocketProvider>{children}</SocketProvider>
+        <JotaiProvider>
+          <SocketProvider>{children}</SocketProvider>
+        </JotaiProvider>
       </ThemeProvider>
     </SessionProvider>
   );

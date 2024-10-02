@@ -2,16 +2,7 @@ import { getUserChats } from "@/actions/chat/getUserChats";
 import { ChatLayout } from "@/components/chat/chat-layout";
 import { cookies } from "next/headers";
 import React from "react";
-
-export interface IChat {
-  id: string;
-  toUser: {
-    id: string;
-    name: string | null;
-    email: string;
-    image: string | null;
-  };
-}
+import { IChat } from "./types";
 
 export default async function ChatPage({
   children,
