@@ -4,7 +4,7 @@ import { Chat } from "@/components/chat/chat";
 import { useAtom, useSetAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { chatAtom, chatStore, messageAtom } from "../store";
 
 const ChatPage = () => {
@@ -12,17 +12,17 @@ const ChatPage = () => {
   const userId = searchParams.get("userId");
   const { data } = useSession();
   const [chat] = useAtom(chatAtom(userId));
-  const setMessages = useSetAtom(messageAtom);
 
-  useEffect(() => {
-    const syncMessages = async () => {
-      if (chat.state === "hasData" && chat.data) {
-        setMessages(chat.data.messages);
-      }
-    };
-    syncMessages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chat.state, setMessages]);
+  // useEffect(() => {
+  //   const syncMessages = async () => {
+  //     if (chat.state === "hasData" && chat.data) {
+  //       console.log(chat.data.messages);
+  //       setMessages(chat.data.messages);
+  //     }
+  //   };
+  //   syncMessages();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [chat.state, setMessages, userId]);
 
   if (!data || !data.user) {
     return <div>Unauthenticated</div>;
