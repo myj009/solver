@@ -40,8 +40,9 @@ export function ChatList({ selectedUser, isMobile, channelId }: ChatListProps) {
     async function syncMessagesFn() {
       await syncMessages();
     }
-
-    syncMessagesFn();
+    if (messages.length === 0) {
+      syncMessagesFn();
+    }
   }, [syncMessages]);
 
   useEffect(() => {
@@ -69,8 +70,6 @@ export function ChatList({ selectedUser, isMobile, channelId }: ChatListProps) {
     }
     setMessages((prev) => [...prev, message]);
   };
-
-  console.log("rerendering chat-list", messages);
 
   const actionIcons = [
     { icon: DotsVerticalIcon, type: "More" },

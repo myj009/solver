@@ -13,23 +13,23 @@ export const messageAtom = atomFamily((channelId: string) =>
 
 export const syncMessagesAtom = atomFamily(
   (channelId: string) =>
-    atom(null, async (_get, set) => {
+    atom(null, async (get, set) => {
       const messages = await getChatMessages(channelId);
-      console.log(messages);
+      // console.log(messages);
       set(messageAtom(channelId), messages);
       return messages;
     }),
   deepEqual
 );
 
-export const updateMessageAtom = (message: Message) => {
-  console.log(message);
-  chatStore.set(messageAtom(message.channelId), (prev) => {
+export const updateMessageAtom = (newMessage: Message) => {
+  // console.log(newMessage);
+  chatStore.set(messageAtom(newMessage.channelId), (prev) => {
     // console.log("Previous messages:", prev); // Debugging line
-    if (typeof message.createdAt == "string") {
-      message.createdAt = new Date(message.createdAt);
+    if (typeof newMessage.createdAt == "string") {
+      newMessage.createdAt = new Date(newMessage.createdAt);
     }
-    const updatedMessages = [...prev, message];
+    const updatedMessages = [...prev, newMessage];
     // console.log("Updated messages:", updatedMessages); // Debugging line
     return updatedMessages;
   });
@@ -43,7 +43,7 @@ const chatAsyncAtom = atomFamily(
       }
 
       const chat: IChat | null = await getUserChat(userId);
-      console.log(chat);
+      // console.log(chat);
       return chat;
     }),
   deepEqual

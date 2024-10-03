@@ -1,6 +1,6 @@
 "use client";
 
-import { IChat } from "@/app/chat/layout";
+import { IChat } from "@/app/chat/types";
 import { Sidebar } from "./chat-sidebar";
 import {
   ResizableHandle,
@@ -48,7 +48,7 @@ export function ChatLayout({
       if (session && session.user) {
         const socket = connectSocket(session.user.token);
         const res = await socket.emitWithAck("user:reach", { userId });
-        console.log(res);
+        // console.log(res);
         if (res.status == "NEW") {
           router.refresh();
         }
