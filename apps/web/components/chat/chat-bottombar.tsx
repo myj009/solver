@@ -18,25 +18,20 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { Input } from "../ui/input";
 
 interface ChatBottombarProps {
   isMobile: boolean;
   sendMessage: (newMessage: string) => void;
 }
 
-export const BottombarIcons = [{ icon: FileImage }, { icon: Paperclip }];
-
 export default function ChatBottombar({
   isMobile,
   sendMessage,
 }: ChatBottombarProps) {
   const [message, setMessage] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  // const setMessages = useChatStore((state) => state.setMessages);
-  // const hasInitialResponse = useChatStore((state) => state.hasInitialResponse);
-  // const setHasInitialResponse = useChatStore(
-  //   (state) => state.setHasInitialResponse
-  // );
   const [isLoading, setisLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -46,6 +41,13 @@ export default function ChatBottombar({
   const handleThumbsUp = () => {
     sendMessage("👍");
     setMessage("");
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+      console.log(event.target.files[0]);
+    }
   };
 
   const handleSend = () => {
@@ -69,25 +71,6 @@ export default function ChatBottombar({
     if (inputRef.current) {
       inputRef.current.focus();
     }
-
-    // if (!hasInitialResponse) {
-    //   setisLoading(true);
-    //   setTimeout(() => {
-    //     setMessages((messages) => [
-    //       ...messages.slice(0, messages.length - 1),
-    //       {
-    //         id: messages.length + 1,
-    //         avatar:
-    //           "https://images.freeimages.com/images/large-previews/971/basic-shape-avatar-1632968.jpg?fmt=webp&h=350",
-    //         name: "Jane Doe",
-    //         message: "Awesome! I am just chilling outside.",
-    //         timestamp: formattedTime,
-    //       },
-    //     ]);
-    //     setisLoading(false);
-    //     setHasInitialResponse(true);
-    //   }, 2500);
-    // }
   }, []);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -103,81 +86,7 @@ export default function ChatBottombar({
   };
 
   return (
-    <div className="px-2 py-4 flex justify-between w-full items-center gap-2">
-      <div className="flex">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Link
-              href="#"
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon" }),
-                "h-9 w-9",
-                "shrink-0"
-              )}
-            >
-              <PlusCircle size={22} className="text-muted-foreground" />
-            </Link>
-          </PopoverTrigger>
-          <PopoverContent side="top" className="w-full p-2">
-            {message.trim() || isMobile ? (
-              <div className="flex gap-2">
-                <Link
-                  href="#"
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "icon" }),
-                    "h-9 w-9",
-                    "shrink-0"
-                  )}
-                >
-                  <Mic size={22} className="text-muted-foreground" />
-                </Link>
-                {BottombarIcons.map((icon, index) => (
-                  <Link
-                    key={index}
-                    href="#"
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "h-9 w-9",
-                      "shrink-0"
-                    )}
-                  >
-                    <icon.icon size={22} className="text-muted-foreground" />
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <Link
-                href="#"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "icon" }),
-                  "h-9 w-9",
-                  "shrink-0"
-                )}
-              >
-                <Mic size={22} className="text-muted-foreground" />
-              </Link>
-            )}
-          </PopoverContent>
-        </Popover>
-        {!message.trim() && !isMobile && (
-          <div className="flex">
-            {BottombarIcons.map((icon, index) => (
-              <Link
-                key={index}
-                href="#"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "icon" }),
-                  "h-9 w-9",
-                  "shrink-0"
-                )}
-              >
-                <icon.icon size={22} className="text-muted-foreground" />
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-
+    <div className="px-3 py-4 flex justify-between w-full items-center gap-2">
       <AnimatePresence initial={false}>
         <motion.div
           key="input"

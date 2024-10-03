@@ -38,28 +38,6 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
             <p className="font-medium">Chats</p>
             <span className="">({chats ? chats.length : 0})</span>
           </div>
-
-          <div>
-            <Link
-              href="#"
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon" }),
-                "h-9 w-9"
-              )}
-            >
-              <MoreHorizontal size={20} />
-            </Link>
-
-            <Link
-              href="#"
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon" }),
-                "h-9 w-9"
-              )}
-            >
-              <SquarePen size={20} />
-            </Link>
-          </div>
         </div>
       )}
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">

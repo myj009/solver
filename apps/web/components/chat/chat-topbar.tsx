@@ -11,12 +11,10 @@ interface ChatTopbarProps {
   selectedUser: UserMin;
 }
 
-export const TopbarIcons = [{ icon: Phone }, { icon: Video }, { icon: Info }];
-
 export default function ChatTopbar({ selectedUser }: ChatTopbarProps) {
   return (
     <ExpandableChatHeader>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         {selectedUser.image ? (
           <Avatar className="flex justify-center items-center">
             <AvatarImage
@@ -35,27 +33,12 @@ export default function ChatTopbar({ selectedUser }: ChatTopbarProps) {
           />
         )}
 
-        <div className="flex flex-col">
-          <span className="font-medium">
+        <div className="flex flex-col justify-center">
+          <span className="font-medium text-lg">
             {selectedUser.name || selectedUser.email}
           </span>
-          <span className="text-xs">Active 2 mins ago</span>
+          {/* <span className="text-xs">Active 2 mins ago</span> */}
         </div>
-      </div>
-
-      <div className="flex gap-1">
-        {TopbarIcons.map((icon, index) => (
-          <Link
-            key={index}
-            href="#"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon" }),
-              "h-9 w-9"
-            )}
-          >
-            <icon.icon size={20} className="text-muted-foreground" />
-          </Link>
-        ))}
       </div>
     </ExpandableChatHeader>
   );
