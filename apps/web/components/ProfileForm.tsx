@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import Avatar from "boring-avatars";
 import {
   ProfileFormValues,
   profileSchema,
@@ -117,13 +118,17 @@ export default function ProfileForm({
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row items-center justify-center space-x-4">
             <div className="relative w-24 h-24">
-              <Image
-                src={user.image || "/public/profile.png"}
-                alt="Profile"
-                width={96}
-                height={96}
-                className="rounded-full object-cover"
-              />
+              {user.image ? (
+                <Image
+                  src={user.image || "/public/profile.png"}
+                  alt="Profile"
+                  width={96}
+                  height={96}
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <Avatar variant="beam" name={user.id} />
+              )}
               {!viewOnly && (
                 <button
                   onClick={() =>

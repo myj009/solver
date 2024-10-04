@@ -25,7 +25,7 @@ export default function JobCard({ job }: JobCardProps) {
             <CardDescription>{job.shortDescription}</CardDescription>
           </div>
           <Button>
-            <Link href={`/jobs/${job.id}/apply`}>Apply Now</Link>
+            <Link href={`/jobs/${job.id}`}>Apply Now</Link>
           </Button>
         </div>
       </CardHeader>

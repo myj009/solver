@@ -78,7 +78,7 @@ export default function ProfileDropdown() {
             For Developers
           </DropdownMenuLabel>
           <DropdownMenuItem className="cursor-pointer" asChild>
-            <Link href="/job-postings">View Jobs Applied To</Link>
+            <Link href="/dev/jobs">View Jobs Applied To</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

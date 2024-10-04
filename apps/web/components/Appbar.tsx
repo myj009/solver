@@ -21,7 +21,6 @@ import { ModeToggle } from "./ThemeToggle";
 
 export default async function Appbar() {
   const session = await getServerSession(authOptions);
-  console.log(session?.user);
 
   return (
     <header className="fixed top-0 z-50 w-full bg-background shadow-sm">

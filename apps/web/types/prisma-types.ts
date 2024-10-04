@@ -13,6 +13,17 @@ export type JobApplicationWithDeveloper = Prisma.JobApplicationGetPayload<{
   };
 }>;
 
+export type JobApplicationWithJob = Prisma.JobApplicationGetPayload<{
+  include: {
+    job: {
+      select: {
+        title: true;
+        shortDescription: true;
+      };
+    };
+  };
+}>;
+
 export type JobWithDeveloperEmail = Prisma.JobGetPayload<{
   include: {
     developer: {
